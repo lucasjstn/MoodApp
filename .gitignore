@@ -2,7 +2,7 @@
 # OSX
 #
 .DS_Store
-
+test/
 # Xcode
 #
 build/
