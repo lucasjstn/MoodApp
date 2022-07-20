@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "name": "BaseApp",
+=======
+  "name": "Moodapp",
+>>>>>>> Stashed changes
   "version": "0.0.1",
   "private": true,
   "scripts": {
