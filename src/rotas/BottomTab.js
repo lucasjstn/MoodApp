@@ -5,11 +5,22 @@ import Perfil from '../telas/Perfil'
 import { Modal, View } from 'react-native';
 
 const BottomTab = () => {
+
+
     const Tab = createBottomTabNavigator();
 
     return (
-      	<Tab.Navigator initialRouteName='Home' backBehavior='firstRoute'
-			 screenOptions={{ headerShown: false, tabBarShowLabel: false, }} defaultScreenOptions={{ tabBarStyle: {} }}>
+      	<Tab.Navigator 
+
+			initialRouteName='Home' 
+			backBehavior='firstRoute'
+			screenOptions={{ 
+				headerShown: false, 
+				tabBarShowLabel: false, 
+			}} 
+			defaultScreenOptions={{ 
+				tabBarStyle: {} 
+			}}>
 
 			 <Tab.Screen name='Home' component={Home} options={{ tabBarIconStyle: { left: -40 } }} />
 			 <Tab.Screen name='Add' component={Provisorio}/> 

@@ -5,7 +5,7 @@ import Entrada from '../componentes/Entrada'
 
 const Login = ({navigation}) => {
 
-    const [params, setParams] = useState('');
+    const [token, setToken] = useState('');
     const [status, setStatus] = useState(0);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("lucas7@email.com");
@@ -14,7 +14,7 @@ const Login = ({navigation}) => {
 
     const FazerLogin = () => {
         
-asdadasdasasdsdasd
+
         axios
             .post("https://shrouded-shelf-01513.herokuapp.com/oauth/token", 
                 {
@@ -26,10 +26,10 @@ asdadasdasasdsdasd
                 }
             )
             .then(response => {
-                // params = response?.data.access_token;
+                // token = response?.data.access_token;
                 // console.log(response?.data.access_token, "\n",response?.data.refresh_token)
                 setStatus(response.status);
-                setParams (response?.data.access_token);
+                setToken (response?.data.access_token);
             })
             .catch(error => { setStatus(error.response.status)})
     }
@@ -77,9 +77,18 @@ asdadasdasasdsdasd
            <Button title='login' onPress={FazerLogin}/>
            <Text>{email}</Text>
            <Text>{password}</Text>
-           <Text>{params}</Text>
+           <Text>{token}</Text>
            <Text>HTTP: {status}</Text>
 
+           <Button title='ii' onPress={() => 
+                navigation.navigate('BottomTab', {
+                    screen: 'Home', 
+                    params: {
+                        token: token,
+                        email: email, 
+                    }
+                }
+            )}/>
         </KeyboardAvoidingView>
     )
 }
