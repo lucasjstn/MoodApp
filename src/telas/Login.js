@@ -1,20 +1,17 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { TextInput, Image, KeyboardAvoidingView, StatusBar, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import Entrada from '../componentes/Entrada'
+import { TextInput, Image, KeyboardAvoidingView, StatusBar, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { azul, corClara, fontePadrao, height, loginLogo, width } from '../constantes';
+
 
 const Login = ({navigation}) => {
 
-    const [token, setToken] = useState('');
-    const [status, setStatus] = useState(0);
-    const [name, setName] = useState("");
+    const [status, setStatus] = useState('');
     const [email, setEmail] = useState("lucas7@email.com");
     const [password, setPassword] = useState("senhasenha");
 
-
     const FazerLogin = () => {
         
-
         axios
             .post("https://shrouded-shelf-01513.herokuapp.com/oauth/token", 
                 {
@@ -28,67 +25,51 @@ const Login = ({navigation}) => {
             .then(response => {
                 // token = response?.data.access_token;
                 // console.log(response?.data.access_token, "\n",response?.data.refresh_token)
-                setStatus(response.status);
-                setToken (response?.data.access_token);
+                navigation.navigate('BottomTab');
+                // navigation.reset({
+                //     index: 0,
+                //     routes: [{name: 'BottomTab'}]
+                // });
+                setStatus('');
             })
-            .catch(error => { setStatus(error.response.status)})
+            .catch(error => { setStatus('Email ou senha inválidos, por favor tente novamente.')})
+
+            
     }
 
     return (
         <KeyboardAvoidingView style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
-           <TextInput 
-                style={{
-                    width: '80%',
-                    backgroundColor: 'white',
-                    color: 'black',
-                    margin: 10,
-                }}
-
-                defaultValue={name}
-                onChangeText={text => setName(text)}
-           />
+            <Text style={styles.mensagem_erro}>{status}</Text>
+            <Image source={loginLogo} resizeMode='contain' style={styles.login_logo}/>
 
             <TextInput 
-                style={{
-                    width: '80%',
-                    backgroundColor: 'white',
-                    color: 'black',
-                    margin: 10,
-                }}
-
+                style={styles.entradatexto1}
                 defaultValue={email}
+                returnKeyType='route'
+                placeholder='email'
                 onChangeText={text => setEmail(text)}
             />
 
             <TextInput 
-                style={{
-                    width: '80%',
-                    backgroundColor: 'white',
-                    color: 'black',
-                    margin: 10,
-                }}
-                
+                style={styles.entradatexto2}
                 defaultValue={password}
+                placeholder='senha'
+                keyboardType='ascii-capable'
+                secureTextEntry
                 onChangeText={text => setPassword(text)}
             />
            
-           <Button title='console' onPress={() => {console.log(name)}}/>
-           <Button title='login' onPress={FazerLogin}/>
-           <Text>{email}</Text>
-           <Text>{password}</Text>
-           <Text>{token}</Text>
-           <Text>HTTP: {status}</Text>
+           
 
-           <Button title='ii' onPress={() => 
-                navigation.navigate('BottomTab', {
-                    screen: 'Home', 
-                    params: {
-                        token: token,
-                        email: email, 
-                    }
-                }
-            )}/>
+           <TouchableOpacity 
+                title='login' 
+                onPress={FazerLogin}
+                style={styles.botao_entrar}
+                >
+            <Text style={styles.botao_entrar_texto}>Entrar</Text>
+           </TouchableOpacity>
+
         </KeyboardAvoidingView>
     )
 }
@@ -96,16 +77,54 @@ const Login = ({navigation}) => {
 
 
 const styles = StyleSheet.create({
+    mensagem_erro: {
+        position: 'absolute',
+        top: height * 0.34,
+        fontFamily: fontePadrao,
+        color: 'orange',
+    },
+    entradatexto1: {
+        padding: 10,
+        position: 'absolute',
+        width: width * 0.77,
+        margin: 10,
+        top: height * 0.36,
+        backgroundColor: corClara,
+        borderRadius: 10,
+    },
+    entradatexto2: {
+        padding: 10,
+        // position: 'absolute',
+        width: width * 0.77,
+        marginBottom: 10,
+        // top: height * 0.38,
+        backgroundColor: corClara,
+        borderRadius: 10,
+    },
+    login_logo: {
+        top: height * 0.07,
+        position: 'absolute',
+        width: width * 0.55,//228, //
+        height: width * 0.55,
+        // backgroundColor: 'red',
+    },
     container: {
+        justifyContent: 'center',
         display: 'flex',
-        height: '100%',
-        backgroundColor: '#304FFE',
+        height: height,
+        backgroundColor: azul,
         alignItems: 'center',
       },
       loginLogo: {
         width: 228,
         height: 228,
 
+       },
+       botao_entrar_texto:{
+        fontFamily: fontePadrao,
+        textTransform: 'uppercase',
+        fontWeight: 'bold',
+        color: azul,
        },
        botao_entrar: {
         backgroundColor: '#C6CEFF',
@@ -114,7 +133,7 @@ const styles = StyleSheet.create({
         width: 133,
         height: 46,
         borderRadius: 10,
-        top: 1,
+        top: 30,
        },
        texto_botao: {
         color: '#304FFE',

@@ -4,22 +4,15 @@ import CartaoAberto from "../telas/CartaoAberto";
 import Cartao from "../telas/Cartao";
 import { Text, View } from "react-native";
 
-const Home = ({route}) => {
-    const { token, email } = route.params;
+const Home = () => {
     
-
     const HomeStack = createNativeStackNavigator();
 
     return (
-        // <HomeStack.Navigator initialRouteName="Cartao" >
-        //     <HomeStack.Screen name='Cartao' component={Cartao} />
-        //     <HomeStack.Screen name='CartaoAberto' component={CartaoAberto} />
-        // </HomeStack.Navigator>
-
-        <View style={{top: '50%'}}>
-            <Text>{email} asdasdaasdasdasssadas</Text>
-            <Text>{token}</Text>
-        </View>
+        <HomeStack.Navigator initialRouteName="Cartao" >
+            <HomeStack.Screen name='Cartao' component={Cartao} />
+            <HomeStack.Screen name='CartaoAberto' component={CartaoAberto} />
+        </HomeStack.Navigator>
     )
 }
 

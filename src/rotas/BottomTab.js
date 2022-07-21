@@ -32,13 +32,7 @@ const BottomTab = () => {
 }
 
 function Provisorio(){
-	return (
-		<Modal style={{justifyContent: 'center', alignItems: 'center'}}> 
-			<View style={{width: 100, height: 100, backgroundColor: 'black'}}>
-
-			</View>
-		</Modal>
-	)
+	return
 }
 
 export default BottomTab;
