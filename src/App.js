@@ -12,9 +12,16 @@ const App = () => {
 
   return(
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
-        <Stack.Screen name="Login" component={Login}/>
-        <Stack.Screen name="BottomTab" component={BottomTab}/>
+      <Stack.Navigator initialRouteName='Login' screenOptions={{headerShown: false,}}>
+        {
+          <>
+            <Stack.Screen name="Login" component={Login}/>
+            <Stack.Screen name="BottomTab" component={BottomTab}/>
+          </>
+        }
+       
+
+        
       </Stack.Navigator>
     </NavigationContainer>
   )

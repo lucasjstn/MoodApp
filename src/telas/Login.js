@@ -1,22 +1,99 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextInput, Image, KeyboardAvoidingView, StatusBar, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import Entrada from '../componentes/Entrada'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
-
-    const [params, setParams] = useState('');
+    
+    const [refresh_token, setRefresh_token] = useState('');
+    const [access_token, setAcess_token] = useState('');
+    let userToken = ''; 
+    let userRefresh_token = '';
+    let user = {
+        Name: access_token,
+        Age: refresh_token
+    };
     const [status, setStatus] = useState(0);
-    const [name, setName] = useState("");
     const [email, setEmail] = useState("lucas7@email.com");
     const [password, setPassword] = useState("senhasenha");
+    const [msgErro, setMsgErro] = useState('');
+    const [botao, setBotao] = useState(false);
+    const [count, setCount] = useState(0);
+    const [userInfo, setUserInfo] = useState({});
 
+
+    useEffect(()=>{
+        // console.log('mount');
+        // console.log('email: ', email);
+        // console.log('senha: ', password);
+        // console.log('status: ', status);
+        // FazerLogin();
+        if(botao == true){
+            if(email.length == 0 || password.length == 0){
+                setMsgErro('Os campos não podem estar vazios.')
+                setBotao(false);
+                setCount(count + 1);
+            } else { 
+                FazerLogin();
+            }   
+            
+        }
+            
+    }, [botao])
+
+    useEffect(()=>{
+        userToken = access_token;
+        userRefresh_token = refresh_token;
+
+        user = {
+            Name: userToken,
+            Age: userRefresh_token,
+        }
+        console.log('asda',     user.Name);
+
+        const setData = async () => {
+            try {
+                await AsyncStorage.setItem('@token', userToken)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        if(status == 400){
+            setMsgErro('Campos de login ou senha estão errados, tente novamente.')
+            setBotao(false);
+            setStatus(0);
+            setCount(count + 1);
+        } 
+         else if(status == 200){
+            
+            setMsgErro('Logado');
+            navigation.navigate('BottomTab')
+        }
+
+    }, [refresh_token])
+
+    useEffect(()=>{
+
+        setCount(0);
+        if(count == 5){
+            setMsgErro('Tentativas Bloqueadas')
+            setEmail('');
+            setPassword('');
+        }
+        
+    }, [count == 5])
+
+    // console.log(access_token);
+
+    
 
     const FazerLogin = () => {
         
-
+        
+        
         axios
-            .post("https://shrouded-shelf-01513.herokuapp.com/oauth/token", 
+        .post("https://shrouded-shelf-01513.herokuapp.com/oauth/token", 
                 {
                     "grant_type": "password",
                     "email": email,
@@ -24,30 +101,34 @@ const Login = ({navigation}) => {
                     "client_id": "3mGWGtxIEKyhq_HGG4cq6hsTOd_zn1SuTD3_cafjUPc",
                     "client_secret": "389JLi1Nd6DQ_soCI85C57ueTlMZ_JR7pRq6SJ0GaB0",
                 }
-            )
-            .then(response => {
-                // params = response?.data.access_token;
-                // console.log(response?.data.access_token, "\n",response?.data.refresh_token)
-                setStatus(response.status);
-                setParams (response?.data.access_token);
+                )
+                .then(response => {
+                    // params = response?.data.access_token;
+                    // console.log(response?.data.access_token, "\n",response?.data.refresh_token)
+                    
+                    console.log(response?.status)
+                    setStatus(response.status);
+                    setAcess_token(response?.data.access_token);
+                    setRefresh_token(response?.data.refresh_token);
+
+
+                })
+            .catch(error => { 
+                console.log(error);
+                setStatus(error.response.status);
+                // console.log(error.response?.status);
+                
             })
-            .catch(error => { setStatus(error.response.status)})
     }
+
+
+
+    
 
     return (
         <KeyboardAvoidingView style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
-           <TextInput 
-                style={{
-                    width: '80%',
-                    backgroundColor: 'white',
-                    color: 'black',
-                    margin: 10,
-                }}
 
-                defaultValue={name}
-                onChangeText={text => setName(text)}
-           />
 
             <TextInput 
                 style={{
@@ -73,12 +154,14 @@ const Login = ({navigation}) => {
                 onChangeText={text => setPassword(text)}
             />
            
-           <Button title='console' onPress={() => {console.log(name)}}/>
-           <Button title='login' onPress={FazerLogin}/>
-           <Text>{email}</Text>
-           <Text>{password}</Text>
-           <Text>{params}</Text>
-           <Text>HTTP: {status}</Text>
+           <Button title='login' onPress={()=> {setBotao(true)
+            console.log('Botao clicado')}}/>
+           <Text style={{fontSize: 20, color: 'orange', fontWeight: 'bold'}}
+           >HTTP: {msgErro}</Text>
+            <Text style={{fontSize: 20, color: 'orange', fontWeight: 'bold'}}
+           >{botao ? 'true' : 'false'}</Text>
+            <Text style={{fontSize: 20, color: 'orange', fontWeight: 'bold'}}
+           >{count}</Text>
 
         </KeyboardAvoidingView>
     )
