@@ -3,8 +3,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import axios from "axios";
 import { TouchableOpacity, StatusBar, StyleSheet, Text, View, FlatList, SafeAreaView, Touchable, Image} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import emojis from '../constantes'
-
+import { emojis } from '../constantes'
+import ItemRender from "../componentes/ItemRender";
 
 const Home = () => {
 
@@ -44,7 +44,7 @@ const Home = () => {
     const data = [
         {
             "id": 518,
-            "mood": "sad",
+            "mood": "happy",
             "created_at": "2022-07-23T11:59:45.324Z",
             "updated_at": "2022-07-23T11:59:45.324Z",
             "user_id": 19,
@@ -86,30 +86,38 @@ const Home = () => {
                 }
             ]
         },
+        {
+            "id": 520,
+            "mood": "bad",
+            "created_at": "2022-07-23T12:43:11.578Z",
+            "updated_at": "2022-07-23T12:43:11.578Z",
+            "user_id": 19,
+            "short_description": "asdsdad fo...",
+            "activities": [
+                {
+                    "id": 1,
+                    "name": "sports"
+                },
+                {
+                    "id": 4,
+                    "name": "party"
+                },
+                {
+                    "id": 3,
+                    "name": "rest"
+                }
+            ]
+        },
         
     ]
 
-    const newobj = Object.values(cards);
-    console.log(newobj)
+    // const newobj = Object.values(cards);
+    // console.log(newobj)
     // console.log(' --------newobj-------\n', newobj[0]['activities'])
     
-
-    const ItemRender = ({ id, mood, created_at, updated_at, user_id, short_description, activities, emoji }) => (
-                <TouchableOpacity
-                    style={styles.box}
-                    activeOpacity={0.6}
-                    onPress={()=> navigation .navigate('CartaoAberto')}
-                >
-                    <Image source={emoji} style={styles.box.imagem_emoji}/>
-                    <Text style={styles.itemText}> {id} </Text>
-                    <Text style={null}>{mood}</Text>
-                    <Text style={null}>{created_at}</Text>
-                    <Text style={null}>{updated_at}</Text>
-                    <Text style={null}>{short_description}</Text>
-                    <Text style={null}>{activities}</Text>
-                </TouchableOpacity>
-      );
-      
+    console.log(data[1].mood)
+ 
+      console.log(emojis['sad']);
       const Cartao = ({navigation}) => {
           return(
               <SafeAreaView>
@@ -118,10 +126,13 @@ const Home = () => {
                       renderItem={({item}) => 
                           <ItemRender 
                             id={item.id} 
+                            emoji={emojis[`${item.mood}`]}
                             mood={item.mood} 
                             created_at={item.created_at}
                             short_description={item.short_description}
-                            activities={[item.activities[0].name, item.activities[1].name, item.activities[2].name]}
+                            activities1={item.activities[0].name}
+                            activities2={item.activities[1].name}
+                            activities3={item.activities[2].name}
                             />}
                       keyExtractor={item => item.id}
                  />
@@ -177,6 +188,55 @@ const Home = () => {
 }
 
 const styles = StyleSheet.create({
+    bem: {
+        textTransform: 'uppercase',
+        fontStyle: 'Source Sans Pro',
+        fontWeight: '400',
+        fontSize: 16,
+        textTransform: 'uppercase',
+        fontStyle: 'Source Sans Pro',
+        fontWeight: '700',
+        fontSize: 24,
+        color: '#E24B4B',
+      },
+      mal: {
+        textTransform: 'uppercase',
+        fontStyle: 'Source Sans Pro',
+        fontWeight: '400',
+        fontSize: 16,
+        textTransform: 'uppercase',
+        fontStyle: 'Source Sans Pro',
+        fontWeight: '700',
+        fontSize: 24,
+        color: '#4B75E2',
+      },
+      triste: {
+        textTransform: 'uppercase',
+        fontStyle: 'Source Sans Pro',
+        fontWeight: '400',
+        fontSize: 16,
+        textTransform: 'uppercase',
+        fontStyle: 'Source Sans Pro',
+        fontWeight: '700',
+        fontSize: 24,
+        color: '#4BE263',
+      },
+    texto: {
+        textTransform: 'uppercase',
+        fontStyle: 'Source Sans Pro',
+        fontWeight: '400',
+        fontSize: 16,
+        
+        hora: {
+          textTransform: 'uppercase',
+          fontStyle: 'Source Sans Pro',
+          fontWeight: '400',
+          fontSize: 14,
+        },
+        
+        
+        
+      },
     box: {
         display: 'flex',
         width: '88%',

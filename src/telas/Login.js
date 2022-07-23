@@ -68,10 +68,13 @@ const Login = ({navigation}) => {
          else if(status == 200){
             
             setMsgErro('Logado');
-            navigation.navigate('BottomTab')
+            navigation.reset({
+                index: 0,
+                routes: [{name: 'BottomTab'}]
+            })
         }
 
-    }, [refresh_token])
+    }, [status])
 
     useEffect(()=>{
 
