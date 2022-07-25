@@ -10,7 +10,7 @@ const Home = () => {
 
     const [access_token, setAcess_token] = useState('');
     const [refresh_token, setRefresh_token] = useState('');
-    const [cards, setCartao] = useState([]);
+    const [cards, setCartao] = useState(1);
     const [count, setCount] = useState(0);
     const [object, setObject] = useState([]);
     
@@ -20,16 +20,21 @@ const Home = () => {
         // console.log(cards);
     }, [])
 
-    const getData = async () => {
+
+    const getData = async (key) => {
         try {
-            AsyncStorage.getItem('@token').then(value => {
-                    setAcess_token(value);
-            })
-            
-        } catch (error) {
-            console.log(error);
+          const value = await AsyncStorage.getItem(key)
+          if(value !== null) {
+            setAcess_token(value);
+          }
+        } catch(e) {
+          // error reading value
         }
-    }
+      }
+
+      useEffect(()=>{
+        getData('@storage_Key');
+    }, [])
 
     const CapturarEntradas = () => {
         axios.get('https://shrouded-shel.herokuapp.com/daily_entries', {
@@ -42,72 +47,72 @@ const Home = () => {
     }
 
     const data = [
-        {
-            "id": 518,
-            "mood": "happy",
-            "created_at": "2022-07-23T11:59:45.324Z",
-            "updated_at": "2022-07-23T11:59:45.324Z",
-            "user_id": 19,
-            "short_description": "asdsdad fo...",
-            "activities": [
-                {
-                    "id": 1,
-                    "name": "sports"
-                },
-                {
-                    "id": 4,
-                    "name": "party"
-                },
-                {
-                    "id": 3,
-                    "name": "rest"
-                }
-            ]
-        },
-        {
-            "id": 519,
-            "mood": "sad",
-            "created_at": "2022-07-23T12:43:11.578Z",
-            "updated_at": "2022-07-23T12:43:11.578Z",
-            "user_id": 19,
-            "short_description": "asdsdad fo...",
-            "activities": [
-                {
-                    "id": 1,
-                    "name": "sports"
-                },
-                {
-                    "id": 4,
-                    "name": "party"
-                },
-                {
-                    "id": 3,
-                    "name": "rest"
-                }
-            ]
-        },
-        {
-            "id": 520,
-            "mood": "bad",
-            "created_at": "2022-07-23T12:43:11.578Z",
-            "updated_at": "2022-07-23T12:43:11.578Z",
-            "user_id": 19,
-            "short_description": "asdsdad fo...",
-            "activities": [
-                {
-                    "id": 1,
-                    "name": "sports"
-                },
-                {
-                    "id": 4,
-                    "name": "party"
-                },
-                {
-                    "id": 3,
-                    "name": "rest"
-                }
-            ]
-        },
+        // {
+        //     "id": 518,
+        //     "mood": "happy",
+        //     "created_at": "2022-07-23T11:59:45.324Z",
+        //     "updated_at": "2022-07-23T11:59:45.324Z",
+        //     "user_id": 19,
+        //     "short_description": "asdsdad fo...",
+        //     "activities": [
+        //         {
+        //             "id": 1,
+        //             "name": "sports"
+        //         },
+        //         {
+        //             "id": 4,
+        //             "name": "party"
+        //         },
+        //         {
+        //             "id": 3,
+        //             "name": "rest"
+        //         }
+        //     ]
+        // },
+        // {
+        //     "id": 519,
+        //     "mood": "sad",
+        //     "created_at": "2022-07-23T12:43:11.578Z",
+        //     "updated_at": "2022-07-23T12:43:11.578Z",
+        //     "user_id": 19,
+        //     "short_description": "asdsdad fo...",
+        //     "activities": [
+        //         {
+        //             "id": 1,
+        //             "name": "sports"
+        //         },
+        //         {
+        //             "id": 4,
+        //             "name": "party"
+        //         },
+        //         {
+        //             "id": 3,
+        //             "name": "rest"
+        //         }
+        //     ]
+        // },
+        // {
+        //     "id": 520,
+        //     "mood": "bad",
+        //     "created_at": "2022-07-23T12:43:11.578Z",
+        //     "updated_at": "2022-07-23T12:43:11.578Z",
+        //     "user_id": 19,
+        //     "short_description": "asdsdad fo...",
+        //     "activities": [
+        //         {
+        //             "id": 1,
+        //             "name": "sports"
+        //         },
+        //         {
+        //             "id": 4,
+        //             "name": "party"
+        //         },
+        //         {
+        //             "id": 3,
+        //             "name": "rest"
+        //         }
+        //     ]
+        // },
         
     ]
 
@@ -115,7 +120,7 @@ const Home = () => {
     // console.log(newobj)
     // console.log(' --------newobj-------\n', newobj[0]['activities'])
     
-    console.log(data[1].mood)
+    // console.log(data[1].mood)
  
       console.log(emojis['sad']);
       const Cartao = ({navigation}) => {
@@ -150,10 +155,10 @@ const Home = () => {
         
                   {/* <Image source={require('../assets/carinha.png')} style={styles.carinha}/> */}
         
+                <Text>{access_token.length}</Text>
                 <Text style={styles.texto}>
                   Você ainda não tem nenhum registro diário. Para começar, toque no ícone de adicionar na tela.
                 </Text>
-        
               </View>
         
             </View>    

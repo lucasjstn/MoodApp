@@ -20,6 +20,7 @@ const Login = ({navigation}) => {
     const [botao, setBotao] = useState(false);
     const [count, setCount] = useState(0);
     const [userInfo, setUserInfo] = useState({});
+    const [params, setParams] = useState('');
 
 
     useEffect(()=>{
@@ -35,29 +36,24 @@ const Login = ({navigation}) => {
                 setCount(count + 1);
             } else { 
                 FazerLogin();
+                setBotao(false);
             }   
             
         }
             
     }, [botao])
 
+    const storeData = async (value) => {
+        try {
+            console.log(value);
+          await AsyncStorage.setItem('@storage_Key', value)
+        } catch (e) {
+          // saving error
+        }
+      }
+
+
     useEffect(()=>{
-        userToken = access_token;
-        userRefresh_token = refresh_token;
-
-        user = {
-            Name: userToken,
-            Age: userRefresh_token,
-        }
-        console.log('asda',     user.Name);
-
-        const setData = async () => {
-            try {
-                await AsyncStorage.setItem('@token', userToken)
-            } catch (error) {
-                console.log(error)
-            }
-        }
 
         if(status == 400){
             setMsgErro('Campos de login ou senha estão errados, tente novamente.')
@@ -68,10 +64,9 @@ const Login = ({navigation}) => {
          else if(status == 200){
             
             setMsgErro('Logado');
-            navigation.reset({
-                index: 0,
-                routes: [{name: 'BottomTab'}]
-            })
+            setBotao(false);
+            
+            navigation.navigate('BottomTab');
         }
 
     }, [status])
@@ -93,10 +88,9 @@ const Login = ({navigation}) => {
 
     const FazerLogin = () => {
         
-        
-        
+
         axios
-        .post("https://shrouded-shelf-01513.herokuapp.com/oauth/token", 
+            .post("https://shrouded-shelf-01513.herokuapp.com/oauth/token", 
                 {
                     "grant_type": "password",
                     "email": email,
@@ -104,24 +98,15 @@ const Login = ({navigation}) => {
                     "client_id": "3mGWGtxIEKyhq_HGG4cq6hsTOd_zn1SuTD3_cafjUPc",
                     "client_secret": "389JLi1Nd6DQ_soCI85C57ueTlMZ_JR7pRq6SJ0GaB0",
                 }
-                )
-                .then(response => {
-                    // params = response?.data.access_token;
-                    // console.log(response?.data.access_token, "\n",response?.data.refresh_token)
-                    
-                    console.log(response?.status)
-                    setStatus(response.status);
-                    setAcess_token(response?.data.access_token);
-                    setRefresh_token(response?.data.refresh_token);
-
-
-                })
-            .catch(error => { 
-                console.log(error);
-                setStatus(error.response.status);
-                // console.log(error.response?.status);
-                
+            )
+            .then(response => {
+                // params = response?.data.access_token;
+                // console.log(response?.data.access_token, "\n",response?.data.refresh_token)
+                setStatus(response.status);
+                setParams (response?.data.access_token);
+                storeData(response?.data.access_token)
             })
+            .catch(error => { console.log(error);setStatus(error.response.status)})
     }
 
 
@@ -132,7 +117,7 @@ const Login = ({navigation}) => {
         <KeyboardAvoidingView style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
 
-
+            <Text>{params}</Text>
             <TextInput 
                 style={{
                     width: '80%',

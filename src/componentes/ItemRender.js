@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { emojis } from "../constantes";
 
+
+
 const ItemRender = ({ id, mood, created_at, updated_at, user_id, short_description, activities1, activities2, activities3, emoji }) => (
+
+
+
     <TouchableOpacity
         style={styles.box}
         activeOpacity={0.6}
@@ -28,6 +33,7 @@ const ItemRender = ({ id, mood, created_at, updated_at, user_id, short_descripti
             <Text style={{flexDirection: 'row', margin: 10,}}>{activities3}</Text>
         </View>
         <Text style={null}>{short_description}</Text>
+        
     </TouchableOpacity>
 );
 
