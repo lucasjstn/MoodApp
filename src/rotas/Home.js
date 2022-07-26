@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import axios from "axios";
-import { TouchableOpacity, StatusBar, StyleSheet, Text, View, FlatList, SafeAreaView, Touchable, Image} from "react-native";
+import { TouchableOpacity, StatusBar, StyleSheet, Text, View, FlatList, SafeAreaView, Touchable, Image, ActivityIndicator} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { emojis } from '../constantes'
 import ItemRender from "../componentes/ItemRender";
@@ -10,15 +10,16 @@ const Home = () => {
 
     const [access_token, setAcess_token] = useState('');
     const [refresh_token, setRefresh_token] = useState('');
-    const [cards, setCartao] = useState(1);
+    const [cards, setCartao] = useState(null);
     const [count, setCount] = useState(0);
     const [object, setObject] = useState([]);
     
 
     useEffect(()=> {
+        // console.log('token atual: \n', access_token);
         CapturarEntradas();
         // console.log(cards);
-    }, [])
+    }, [access_token])
 
 
     const getData = async (key) => {
@@ -34,16 +35,33 @@ const Home = () => {
 
       useEffect(()=>{
         getData('@storage_Key');
-    }, [])
+      }, [access_token])
+      
+      useEffect(()=>{
+        CapturarEntradas();
+        return (()=> {cards === null})
+    }, [cards === null])
+    const config = {
+      headers: { 'Authorization': `Bearer cMqC64-PGaroJtIlJ-eOqNdRfFVuGhgIQZ-GjoiKZPE
+      `}
+    }
 
-    const CapturarEntradas = () => {
-        axios.get('https://shrouded-shel.herokuapp.com/daily_entries', {
-            headers: { 'Authorization': `Bearer 68lMx8dLkJe0XlyEF9FHa6Nehh7htU25_EaUgBx0myo`}
-        }).then(response => {
-            // console.log(response?.data)
-            setCartao(Object.keys(response?.data).length);
-            setObject(response?.data);
-        }).catch(error => console.log(error))
+    const CapturarEntradas = async () => {
+        try {
+            await axios.get(`https://shrouded-shelf-01513.herokuapp.com/daily_entries`, config
+            ).then(response => response).then(response => {setCartao(response?.data)})
+        } catch (error) {
+            console.warn(error);
+        }   
+        
+        // console.log('cards no documento: \n', cards);
+        // axios.get('https://shrouded-shel.herokuapp.com/daily_entries', {
+        //     headers: { 'Authorization': `Bearer ${access_token}`}
+        // }).then(response => {
+        //     // console.log(response?.data)
+        //     setCartao(Object.keys(response?.data).length);
+        //     setObject(response?.data);
+        // }).catch(error => console.log('erororororo: \n', error))
     }
 
     const data = [
@@ -122,12 +140,16 @@ const Home = () => {
     
     // console.log(data[1].mood)
  
-      console.log(emojis['sad']);
+    //   console.log(emojis['sad']);
+    if(cards == null) return <View style={{flex: 1, justifyContent: 'center'}}><ActivityIndicator size={"large"} color={'blue'}/></View>
+    console.log('cartao 1: \n', cards != null ? Object.keys(cards) : 'nulo');
+    console.log(typeof cards !== 'undefined' ? cards[0].activities[2]  : 'nulo')
       const Cartao = ({navigation}) => {
           return(
               <SafeAreaView>
                  <FlatList 
-                      data={data}
+                      ListEmptyComponent={ListaVazia}
+                      data={cards}
                       renderItem={({item}) => 
                           <ItemRender 
                             id={item.id} 
@@ -135,9 +157,9 @@ const Home = () => {
                             mood={item.mood} 
                             created_at={item.created_at}
                             short_description={item.short_description}
-                            activities1={item.activities[0].name}
-                            activities2={item.activities[1].name}
-                            activities3={item.activities[2].name}
+                            activities1={typeof item.activities[0] === 'undefined' ? null : item.activities[0].name }
+                            activities2={typeof item.activities[1] === 'undefined' ? null : item.activities[1].name}
+                            activities3={typeof item.activities[2] === 'undefined' ? '' : item.activities[2].name  }
                             />}
                       keyExtractor={item => item.id}
                  />
@@ -145,7 +167,9 @@ const Home = () => {
           )
       }
       const ListaVazia = () => {
-          return (
+         
+          setTimeout(() => {
+            return (
               <View style={styles.container}>
               <StatusBar barStyle={'dark-content'}
                         backgroundColor={'white'}
@@ -163,6 +187,8 @@ const Home = () => {
         
             </View>    
           )
+          }, 0);
+        
       }
       
 
@@ -177,16 +203,14 @@ const Home = () => {
 
     return (
         <HomeStack.Navigator initialRouteName="Cartao" screenOptions={{headerShown: false,}}>
-            {cards == 0?
             <>
             <HomeStack.Screen name='Cartao' component={Cartao} />
             <HomeStack.Screen name='CartaoAberto' component={CartaoAberto} />
             </>
-            :
             <>
-            <HomeStack.Screen name='ListaVazia' component={ListaVazia}/>
+            <HomeStack.Screen name='ListaVazia' component={ListaVazia} />
             </>
-            }
+      
            
         </HomeStack.Navigator>
     )

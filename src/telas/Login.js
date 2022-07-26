@@ -22,7 +22,9 @@ const Login = ({navigation}) => {
     const [userInfo, setUserInfo] = useState({});
     const [params, setParams] = useState('');
 
-
+    useEffect(() => {
+        AsyncStorage.removeItem('@login');
+    }, [])
     useEffect(()=>{
         // console.log('mount');
         // console.log('email: ', email);
@@ -45,7 +47,7 @@ const Login = ({navigation}) => {
 
     const storeData = async (value) => {
         try {
-            console.log(value);
+            // console.log(value);
           await AsyncStorage.setItem('@storage_Key', value)
         } catch (e) {
           // saving error

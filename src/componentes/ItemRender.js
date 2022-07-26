@@ -20,6 +20,7 @@ const ItemRender = ({ id, mood, created_at, updated_at, user_id, short_descripti
             mood == 'happy' ? <Text style={styles.bem}>BEM</Text>
             : mood === 'sad' ? <Text style={styles.triste}>TRISTE</Text>
             : mood === 'bad' ? <Text style={styles.mal}>MAL</Text>
+            : mood === 'radiant' ? <Text style={styles.bem}>RADIANTE</Text>
             : null
         }
 

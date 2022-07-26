@@ -41,6 +41,7 @@ function Provisorio({navigation}){
             visible={show}
 			
         > 
+			{/* //container principal */}
             <View style={{flex: 1,height: '100%',backgroundColor: lightColor}}>
 
 				<TouchableOpacity style={{borderRadius: 10,justifyContent: 'center',width: 40, height: 40, backgroundColor: lightBlue, alignItems: 'center'}} onPress={toHome}>
