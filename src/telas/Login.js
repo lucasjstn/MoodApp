@@ -48,7 +48,7 @@ const Login = ({navigation}) => {
     const storeData = async (value) => {
         try {
             // console.log(value);
-          await AsyncStorage.setItem('@storage_Key', value)
+          await AsyncStorage.setItem('@login', value)
         } catch (e) {
           // saving error
         }

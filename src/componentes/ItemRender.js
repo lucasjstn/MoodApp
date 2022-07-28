@@ -1,76 +1,159 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { emojis } from "../constantes";
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { atividadesicones, atividadesicones1, emojis, fontePadrao } from "../constantes";
+import dateFormat, { masks} from "dateformat";
+
+const now = new Date();
 
 
+export const ListEmoji = ({ emoji }) => (
+  <Pressable onFocus={null} onPress={()=>{}} style={{width: 50, height: 50, backgroundColor: 'blue', margin: 10}}>
+          <View>
+          <Image style={{resizeMode: 'contain',position: 'absolute', width: 50, height: 50}} source={emoji}/>
+          </View>
+  </Pressable>
+  );
 
-const ItemRender = ({ id, mood, created_at, updated_at, user_id, short_description, activities1, activities2, activities3, emoji }) => (
+const ItemRender = ({icone1, icone2, icone3,navigation, id, mood, created_at, updated_at, user_id, short_description, activities1, activities2, activities3, emoji }) => {
 
 
+  const [createdat, setCreatedat] = useState('');
+  // created_at = new Date();
+  const date = created_at.slice(0, 10);
+  const hour = created_at.slice(11, 16);
 
-    <TouchableOpacity
-        style={styles.box}
-        activeOpacity={0.6}
-        onPress={()=> navigation .navigate('CartaoAberto')}
+  return (
+    <><TouchableOpacity
+      style={styles.box}
+      activeOpacity={0.6}
+      onPress={navigation}
     >
-        <Image source={emoji} style={styles.box.imagem_emoji}/>
+        <Image source={emoji} style={styles.box.imagem_emoji} />
         <Text style={styles.itemText}> {id} </Text>
-        
-        {
-            mood == 'happy' ? <Text style={styles.bem}>BEM</Text>
+
+        <View style={{ position: 'absolute', top: '23%', left: '25%', flexDirection: 'row' }}>
+
+          {mood == 'happy' ? <Text style={[styles.bem]}>FELIZ</Text>
             : mood === 'sad' ? <Text style={styles.triste}>TRISTE</Text>
-            : mood === 'bad' ? <Text style={styles.mal}>MAL</Text>
-            : mood === 'radiant' ? <Text style={styles.bem}>RADIANTE</Text>
-            : null
-        }
-
-
-        <Text style={null}>{created_at}</Text>
-        <Text style={null}>{updated_at}</Text>
-        
-        <View style={{flexDirection: 'row'}}>
-            <Text style={{flexDirection: 'row', margin: 10,}}>{activities1}</Text>
-            <Text style={{margin: 10,}}>{activities2}</Text>
-            <Text style={{flexDirection: 'row', margin: 10,}}>{activities3}</Text>
+              : mood === 'ok' ? <Text style={styles.ok}>OK</Text>
+                : mood === 'terrible' ? <Text style={styles.mal}>ACABADO</Text>
+                  : mood === 'radiant' ? <Text style={styles.radiante}>RADIANTE</Text>
+                    : null}
+          <Text style={{ top: 10, left: 5 }}>{hour}</Text>
         </View>
-        <Text style={null}>{short_description}</Text>
-        
-    </TouchableOpacity>
-);
+
+
+        <Text style={{ position: 'absolute', left: '24.9%', top: '10%' }}>{date}</Text>
+
+
+        <View style={{ flexDirection: 'row', alignSelf: 'center', width: '95%', height: 40, top: '50%', position: 'absolute', left: 30, }}>
+          <View style={{ top: 7 }}>
+            {atividadesicones1[icone1]}
+          </View>
+
+          <Text style={{ flexDirection: 'row', top: 10, left: 4, fontWeight: 'bold', fontFamily: fontePadrao }}>
+            {activities1 == 'rest' ? 'descanso'
+              : activities1 == 'party' ? 'festa'
+                : activities1 == 'shopping' ? 'comprass'
+                  : activities1 == 'sports' ? 'esporte'
+                    : activities1 == 'date' ? 'encontro'
+                      : activities1 == 'movies' ? 'filmes e séries'
+                        : activities1 == 'games' ? 'jogos'
+                          : activities1 == 'cooking' ? 'cozinhar'
+                            : activities1 == 'good_meal' ? 'boa refeição'
+                              : null}
+          </Text>
+          <View style={{ margin: 10, }}>
+            {atividadesicones1[icone2]}
+          </View>
+          <Text style={{ flexDirection: 'row', top: 10, fontWeight: 'bold', fontFamily: fontePadrao }}>
+            {activities2 == 'rest' ? 'descanso'
+              : activities2 == 'party' ? 'festa'
+                : activities2 == 'shopping' ? 'compras'
+                  : activities2 == 'sports' ? 'esporte'
+                    : activities2 == 'date' ? 'encontro'
+                      : activities2 == 'movies' ? 'filmes e séries'
+                        : activities2 == 'games' ? 'jogos'
+                          : activities2 == 'cooking' ? 'cozinhar'
+                            : activities2 == 'good_meal' ? 'boa refeição'
+                              : null}
+          </Text>
+          <View style={{ margin: 10, }}>
+            {atividadesicones1[icone3]}
+          </View>
+          <Text style={{ flexDirection: 'row', top: 10, fontWeight: 'bold', fontFamily: fontePadrao }}>
+            {activities3 == 'rest' ? 'descanso'
+              : activities3 == 'party' ? 'festa'
+                : activities3 == 'shopping' ? 'compras'
+                  : activities3 == 'sports' ? 'esporte'
+                    : activities3 == 'date' ? 'encontro'
+                      : activities3 == 'movies' ? 'filmes e séries'
+                        : activities3 == 'games' ? 'jogos'
+                          : activities3 == 'cooking' ? 'cozinhar'
+                            : activities3 == 'good_meal' ? 'boa refeição'
+                              : null}
+          </Text>
+        </View>
+        <Text style={{ position: 'absolute', top: '70%', left: 30, }}>{short_description.length > 0 ? short_description : '...sem descrição'}</Text>
+
+      </TouchableOpacity><View style={{height: 5}}>
+
+</View></>
+
+  )
+}
+
+
+    
+      
+
 
 const styles = StyleSheet.create({
     bem: {
         textTransform: 'uppercase',
-        fontStyle: 'Source Sans Pro',
         fontWeight: '400',
         fontSize: 16,
         textTransform: 'uppercase',
-        fontStyle: 'Source Sans Pro',
         fontWeight: '700',
         fontSize: 24,
-        color: '#E24B4B',
+        color: 'red',
+        fontFamily: fontePadrao,
       },
       mal: {
         textTransform: 'uppercase',
-        fontStyle: 'Source Sans Pro',
         fontWeight: '400',
         fontSize: 16,
-        textTransform: 'uppercase',
-        fontStyle: 'Source Sans Pro',
         fontWeight: '700',
         fontSize: 24,
         color: '#4B75E2',
+        fontFamily: fontePadrao,
       },
       triste: {
         textTransform: 'uppercase',
-        fontStyle: 'Source Sans Pro',
         fontWeight: '400',
         fontSize: 16,
-        textTransform: 'uppercase',
-        fontStyle: 'Source Sans Pro',
         fontWeight: '700',
         fontSize: 24,
         color: '#4BE263',
+        fontFamily: fontePadrao,
+      },
+      radiante: {
+        textTransform: 'uppercase',
+        fontWeight: '400',
+        fontSize: 16,
+        fontWeight: '700',
+        fontSize: 24,
+        color: 'purple',
+        fontFamily: fontePadrao,
+      },
+      ok: {
+        textTransform: 'uppercase',
+        fontWeight: '400',
+        fontSize: 16,
+        fontWeight: '900',
+        fontSize: 24,
+        color: 'grey',
+        fontFamily: fontePadrao,
       },
     texto: {
         textTransform: 'uppercase',
@@ -89,7 +172,6 @@ const styles = StyleSheet.create({
         
       },
     box: {
-        display: 'flex',
         width: '88%',
         height: 158,
         backgroundColor: 'white',
@@ -98,7 +180,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         imagem_emoji: {
           position: 'absolute',
-          backgroundColor: 'red',
+          // backgroundColor: 'red',
           width: '15%',
           height: '36%',
           left: '7.9%',

@@ -1,23 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import axios from "axios";
-import { TouchableOpacity, StatusBar, StyleSheet, Text, View, FlatList, SafeAreaView, Touchable, Image, ActivityIndicator} from "react-native";
+import { TouchableOpacity, StatusBar, StyleSheet, Text, View, FlatList, SafeAreaView, Touchable, Image, ActivityIndicator, Alert} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { emojis } from '../constantes'
 import ItemRender from "../componentes/ItemRender";
+import CartaoAberto from "../telas/CartaoAberto";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const Home = () => {
-
+const Home = ({navigation}) => {
+    
     const [access_token, setAcess_token] = useState('');
     const [refresh_token, setRefresh_token] = useState('');
     const [cards, setCartao] = useState(null);
     const [count, setCount] = useState(0);
     const [object, setObject] = useState([]);
     
+    const isFocused = useIsFocused();
+
+    // useFocusEffect(
+    //   React.useCallback(() => {
+    //     // Do something when the screen is focused.
+    //     setCartao(null)
+        
+    //     return () => {
+    //       // Do something when the screen is unfocused
+    //       CapturarEntradas();
+    //    setCartao(null)
+      
+        
+    //     };
+    //   }, [])
+    // );
+
+    //   useEffect(()=>{
+    //     setTimeout(() => {
+    //       CapturarEntradas();
+    //     }, 0);
+    //   })
 
     useEffect(()=> {
         // console.log('token atual: \n', access_token);
         CapturarEntradas();
+        console.log(access_token)
         // console.log(cards);
     }, [access_token])
 
@@ -34,16 +60,15 @@ const Home = () => {
       }
 
       useEffect(()=>{
-        getData('@storage_Key');
+        getData('@login');
       }, [access_token])
       
-      useEffect(()=>{
-        CapturarEntradas();
-        return (()=> {cards === null})
-    }, [cards === null])
+    //   useEffect(()=>{
+    //     CapturarEntradas();
+    //     return (()=> {cards === null})
+    // }, [cards === null])
     const config = {
-      headers: { 'Authorization': `Bearer cMqC64-PGaroJtIlJ-eOqNdRfFVuGhgIQZ-GjoiKZPE
-      `}
+      headers: { 'Authorization': `Bearer ${access_token}`}
     }
 
     const CapturarEntradas = async () => {
@@ -51,7 +76,7 @@ const Home = () => {
             await axios.get(`https://shrouded-shelf-01513.herokuapp.com/daily_entries`, config
             ).then(response => response).then(response => {setCartao(response?.data)})
         } catch (error) {
-            console.warn(error);
+            // console.warn(error);
         }   
         
         // console.log('cards no documento: \n', cards);
@@ -64,75 +89,6 @@ const Home = () => {
         // }).catch(error => console.log('erororororo: \n', error))
     }
 
-    const data = [
-        // {
-        //     "id": 518,
-        //     "mood": "happy",
-        //     "created_at": "2022-07-23T11:59:45.324Z",
-        //     "updated_at": "2022-07-23T11:59:45.324Z",
-        //     "user_id": 19,
-        //     "short_description": "asdsdad fo...",
-        //     "activities": [
-        //         {
-        //             "id": 1,
-        //             "name": "sports"
-        //         },
-        //         {
-        //             "id": 4,
-        //             "name": "party"
-        //         },
-        //         {
-        //             "id": 3,
-        //             "name": "rest"
-        //         }
-        //     ]
-        // },
-        // {
-        //     "id": 519,
-        //     "mood": "sad",
-        //     "created_at": "2022-07-23T12:43:11.578Z",
-        //     "updated_at": "2022-07-23T12:43:11.578Z",
-        //     "user_id": 19,
-        //     "short_description": "asdsdad fo...",
-        //     "activities": [
-        //         {
-        //             "id": 1,
-        //             "name": "sports"
-        //         },
-        //         {
-        //             "id": 4,
-        //             "name": "party"
-        //         },
-        //         {
-        //             "id": 3,
-        //             "name": "rest"
-        //         }
-        //     ]
-        // },
-        // {
-        //     "id": 520,
-        //     "mood": "bad",
-        //     "created_at": "2022-07-23T12:43:11.578Z",
-        //     "updated_at": "2022-07-23T12:43:11.578Z",
-        //     "user_id": 19,
-        //     "short_description": "asdsdad fo...",
-        //     "activities": [
-        //         {
-        //             "id": 1,
-        //             "name": "sports"
-        //         },
-        //         {
-        //             "id": 4,
-        //             "name": "party"
-        //         },
-        //         {
-        //             "id": 3,
-        //             "name": "rest"
-        //         }
-        //     ]
-        // },
-        
-    ]
 
     // const newobj = Object.values(cards);
     // console.log(newobj)
@@ -142,8 +98,14 @@ const Home = () => {
  
     //   console.log(emojis['sad']);
     if(cards == null) return <View style={{flex: 1, justifyContent: 'center'}}><ActivityIndicator size={"large"} color={'blue'}/></View>
-    console.log('cartao 1: \n', cards != null ? Object.keys(cards) : 'nulo');
-    console.log(typeof cards !== 'undefined' ? cards[0].activities[2]  : 'nulo')
+    // console.log('cartao 1: \n', cards != null ? Object.keys(cards) : 'nulo');
+    // console.log(typeof cards !== 'undefined' ? cards[0].activities[2]  : 'nulo')
+    // console.log(emojis[0]['sad'])
+
+    const abrirCartao = (rota, payload) => {
+      navigation.navigate(rota, payload);
+    }
+
       const Cartao = ({navigation}) => {
           return(
               <SafeAreaView>
@@ -153,22 +115,33 @@ const Home = () => {
                       renderItem={({item}) => 
                           <ItemRender 
                             id={item.id} 
-                            emoji={emojis[`${item.mood}`]}
+                            emoji={emojis[0][`${item.mood}`]}
                             mood={item.mood} 
                             created_at={item.created_at}
                             short_description={item.short_description}
                             activities1={typeof item.activities[0] === 'undefined' ? null : item.activities[0].name }
                             activities2={typeof item.activities[1] === 'undefined' ? null : item.activities[1].name}
                             activities3={typeof item.activities[2] === 'undefined' ? '' : item.activities[2].name  }
+                            icone1={item.activities[0].id}
+                            icone2={item.activities[1].id}
+                            icone3={item.activities[2].id}
+                            navigation={()=>abrirCartao('CartaoAberto', {
+                              id: item.id,
+                              token: access_token,
+                              atividade1: item.activities[0].name,
+                              atividade2: item.activities[1].name,
+                              atividade3: item.activities[2].name,
+                            })}
                             />}
                       keyExtractor={item => item.id}
                  />
+                 <Text>{access_token.length}</Text>
               </SafeAreaView>
           )
       }
       const ListaVazia = () => {
          
-          setTimeout(() => {
+
             return (
               <View style={styles.container}>
               <StatusBar barStyle={'dark-content'}
@@ -187,25 +160,20 @@ const Home = () => {
         
             </View>    
           )
-          }, 0);
+         
         
       }
       
 
-    const CartaoAberto = () => {
-
-    }
-
-
 
     // console.log(object);
-    const HomeStack = createNativeStackNavigator();
+    const HomeStack = createBottomTabNavigator();
 
     return (
-        <HomeStack.Navigator initialRouteName="Cartao" screenOptions={{headerShown: false,}}>
+        <HomeStack.Navigator initialRouteName="Cartao" screenOptions={{headerShown: false,}} tabBar={()=> null}>
             <>
-            <HomeStack.Screen name='Cartao' component={Cartao} />
-            <HomeStack.Screen name='CartaoAberto' component={CartaoAberto} />
+            <HomeStack.Screen name='Cartao' options={{unmountOnBlur: true}} component={Cartao} />
+            <HomeStack.Screen name='CartaoAberto' options={{unmountOnBlur: true}} component={CartaoAberto} />
             </>
             <>
             <HomeStack.Screen name='ListaVazia' component={ListaVazia} />

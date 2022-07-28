@@ -1,94 +1,133 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React, { useEffect, useState } from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, {useEffect, useState} from 'react';
 import Home from './Home';
-import Perfil from '../telas/Perfil'
-import { Modal, Text, View, TextInput, TouchableOpacity, Pressable} from 'react-native';
-import { darkBlue, lightBlue, lightColor } from '../constantes';
+import Perfil from '../telas/Perfil';
+import {
+  Modal,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  Image,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+} from 'react-native';
+import {
+  darkBlue,
+  emojis,
+  emojislist,
+  lightBlue,
+  lightColor,
+} from '../constantes';
+import {Item2render, ListEmoji} from '../componentes/ItemRender';
+import Adicionar from './Adicionar';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const BottomTab = ({navigation}) => {
-    const Tab = createBottomTabNavigator();
+const BottomTab = ({navigation, route}) => {
 
-    return (
-      	<Tab.Navigator initialRouteName='Home' backBehavior='firstRoute'
-			 screenOptions={{ headerShown: false, tabBarShowLabel: false, }} defaultScreenOptions={{}}>
+  const Tab = createBottomTabNavigator();
 
-			 <Tab.Screen name='Home' component={Home} options={{ unmountOnBlur: true, }} />
-			 <Tab.Screen name='Add' component={Provisorio} options={{unmountOnBlur: true,}} /> 
-			 <Tab.Screen name='Perfil' component={Perfil}/>
+  return (
+    <Tab.Navigator
+    
+      initialRouteName="Home"
+      backBehavior="firstRoute"
+      screenOptions={{
+        tabBarStyle: {height: 60},
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarHideOnKeyboard: true,
+      }}
+      defaultScreenOptions={{}}>
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          unmountOnBlur: true,
+          tabBarIcon: ({focused, size, color}) => (
+            <ButtonHome color={focused ? '#C6CEFF' : 'blue'} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Add"
+        component={Adicionar}
+        options={{
+          unmountOnBlur: true,
+          tabBarIcon: ({focused, size, color}) => (
+            <ButtonAdd color={color} size={65} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Perfil"
+        component={Perfil}
+        initialParams={{}}
+        options={{
+          unmountOnBlur: true,
+          tabBarIcon: ({focused, size, color}) => (
+            <ButtonList color={focused ? '#C6CEFF' : 'blue'} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
-		 </Tab.Navigator>
-		 	
-    )
+function ButtonList(props) {
+  return props.color !== 'blue' ? (
+    <View style={styles.containerAtive}>
+      <Icon name="list-sharp" size={20} color={props.color} />
+    </View>
+  ) : (
+    <View style={styles.container}>
+      <Icon name="list-sharp" size={20} color={'blue'} />
+    </View>
+  );
 }
 
-function Provisorio({navigation}){
-
-	const [show, setShow] = useState(false);
-	const [selected, setSelected] = useState(false);
-
-	const toHome = () => {
-		navigation.navigate('Home');
-	}
-
-	useEffect(() => {
-		setShow(true);
-	}, [])
-
-    return (
-
-        <Modal 
-		hardwareAccelerated
-            visible={show}
-			
-        > 
-			{/* //container principal */}
-            <View style={{flex: 1,height: '100%',backgroundColor: lightColor}}>
-
-				<TouchableOpacity style={{borderRadius: 10,justifyContent: 'center',width: 40, height: 40, backgroundColor: lightBlue, alignItems: 'center'}} onPress={toHome}>
-					<Text style={{fontSize: 25, color: darkBlue}}>X</Text>
-				</TouchableOpacity>
-				<Text>Como voce está?</Text>
-				<Text>hoje, 23 de janeiro</Text>
-				<Text>8:35</Text>
-
-				<View style={{flexDirection: 'row', justifyContent: 'center'}}>
-					<Pressable onFocus={null} onPress={()=>{setSelected(true)}} style={selected ? {width: 50, height: 50, backgroundColor: 'blue', margin: 10}: {width: 50, height: 50, backgroundColor: 'red', margin: 10}}>
-
-					</Pressable>
-					<TouchableOpacity style={{width: 50, height: 50, backgroundColor: 'blue', margin: 10}}>
-
-					</TouchableOpacity>
-					<TouchableOpacity style={{width: 50, height: 50, backgroundColor: 'blue', margin: 10}}>
-
-					</TouchableOpacity>
-					<TouchableOpacity style={{width: 50, height: 50, backgroundColor: 'blue', margin: 10}}>
-
-					</TouchableOpacity>
-					<TouchableOpacity style={{width: 50, height: 50, backgroundColor: 'blue', margin: 10}}>
-
-					</TouchableOpacity>
-
-					
-				</View>
-				<View style={{borderRadius: 10, backgroundColor: 'white', borderColor: 'black', borderWidth: 1, height: '50%', width: '90%', alignSelf: 'center'}}>
-
-				</View>
-
-				
-
-				<View style={{top: 20,borderRadius: 10, backgroundColor: 'white', borderColor: 'black', borderWidth: 1, height: '10%', width: '90%', alignSelf: 'center'}}>
-					<TextInput placeholder='escreva aqui o que aconteceu'/>
-				</View>
-				
-				<View style={{top: 50}}>
-				<TouchableOpacity style={{position: 'relative',backgroundColor: darkBlue, width: '90%', alignSelf: 'center', alignItems: 'center', top: '100%'}}>
-					<Text>Salvar</Text>
-				</TouchableOpacity>
-				</View>
-			</View>
-        </Modal>
-        
-    )
+function ButtonAdd(props) {
+  return (
+    <View style={{height: 70, alignItems: 'center', width: 100, elevation: 10}}>
+      <Icon name="add-circle-sharp" color={'blue'} size={props.size} />
+    </View>
+  );
 }
+
+function ButtonHome(props) {
+  return props.color !== 'blue' ? (
+    <View style={styles.containerAtive}>
+      <Icon name="home-sharp" size={20} color={props.color} />
+    </View>
+  ) : (
+    <View style={styles.container}>
+      <Icon name="home-sharp" size={20} color={'blue'} />
+    </View>
+  );
+}
+const styles = StyleSheet.create({
+  container: {
+    width: 50,
+    backgroundColor: '#304ffe1a',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  containerAtive: {
+    width: 50,
+    backgroundColor: 'blue',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+});
 
 export default BottomTab;
