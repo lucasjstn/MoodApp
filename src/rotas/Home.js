@@ -19,26 +19,7 @@ const Home = ({navigation}) => {
     
     const isFocused = useIsFocused();
 
-    // useFocusEffect(
-    //   React.useCallback(() => {
-    //     // Do something when the screen is focused.
-    //     setCartao(null)
-        
-    //     return () => {
-    //       // Do something when the screen is unfocused
-    //       CapturarEntradas();
-    //    setCartao(null)
-      
-        
-    //     };
-    //   }, [])
-    // );
 
-    //   useEffect(()=>{
-    //     setTimeout(() => {
-    //       CapturarEntradas();
-    //     }, 0);
-    //   })
 
     useEffect(()=> {
         // console.log('token atual: \n', access_token);
@@ -135,7 +116,7 @@ const Home = ({navigation}) => {
                             />}
                       keyExtractor={item => item.id}
                  />
-                 <Text>{access_token.length}</Text>
+                 {/* <Text>{access_token.length}</Text> */}
               </SafeAreaView>
           )
       }
@@ -147,12 +128,12 @@ const Home = ({navigation}) => {
               <StatusBar barStyle={'dark-content'}
                         backgroundColor={'white'}
               />
-        
+              <Image source={require('../assets/carinha.png')} style={{alignSelf: 'center', top: 5}}/>
               <View style={styles.conteudo}>
         
                   {/* <Image source={require('../assets/carinha.png')} style={styles.carinha}/> */}
         
-                <Text>{access_token.length}</Text>
+                {/* <Text>{access_token.length}</Text> */}
                 <Text style={styles.texto}>
                   Você ainda não tem nenhum registro diário. Para começar, toque no ícone de adicionar na tela.
                 </Text>

@@ -14,85 +14,125 @@ import {
   Modal,
   KeyboardAvoidingView,
 } from 'react-native';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import {darkBlue, fontePadrao, lightBlue, lightColor} from '../../constantes';
+import {FlatList, ScrollView, TextInput} from 'react-native-gesture-handler';
+import {darkBlue, emojislist, fontePadrao, FotoLista, lightBlue, lightColor} from '../../constantes';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const EditarPerfil = ({navigation, route}) => {
-
-    const {currentPhoto, currentName, currentEmail, currentGender, currentBirth} = route.params;
-    const data = JSON.parse(currentBirth);
-
-    const [name, setName] = useState(currentName);
-    const [email, setEmail] = useState(currentEmail);
-    const [gender, setGender] = useState(currentGender);
-    const [birth, setBirth] = useState(data);
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-        {
-            label: 'masculino', value: 'masculino'
-        },
-        {
-            label: 'feminino', value: 'feminino'
-        },
-        {
-            label: 'outro', value: 'outro'
-        }
-    ]);
-    const [modal, setModal] = useState(false);
-    console.log(value);
-    console.log(birth)
-
-    // const EditarUsuário
-
-    const photos = [
+  const {currentPhoto, currentName, currentEmail, currentGender, currentBirth, access_token} =
+    route.params;
+  const dataNas = JSON.parse(currentBirth);
+  const [data, setData] = useState([]);
+  const [name, setName] = useState(currentName);
+  const [email, setEmail] = useState(currentEmail);
+  const [gender, setGender] = useState(currentGender);
+  const [birth, setBirth] = useState(data);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [photoAtual, setPhotoAtual] = useState(currentPhoto);
+  const [items, setItems] = useState([
     {
-        id: 1,
-        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_1.png'
+      label: 'masculino',
+      value: 'male',
     },
     {
-        id: 2,
-        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_2.png'
+      label: 'feminino',
+      value: 'female',
     },
     {
-        id: 3,
-        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_3.png'
+      label: 'outro',
+      value: 'other',
     },
-    {
-        id: 4,
-        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_4.png'
+  ]);
+  const [modal, setModal] = useState(false);
+  // console.log(value);
+  // console.log(birth);
+  const [photo, setPhoto] = useState(0);
+  // console.log(photo)
+  // const EditarUsuário
+  // console.log(items);
+  // console.log(value);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
     },
-    {
-        id: 5,
-        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_5.png'
-    },
-    {
-        id: 1,
-        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_1.png'
-    },
-    {
-        id: 1,
-        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_1.png'
-    },
-    {
-        id: 1,
-        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_1.png'
-    },
-    {
-        id: 1,
-        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_1.png'
+  };
+  // console.log(access_token);
+  const AtualizarUsuario = () => {
+    axios.put('https://shrouded-shelf-01513.herokuapp.com/user', {
+      "user": {
+        "gender": value,
+        "photo_id": photo,
     }
-]
+    }, config).then(response => response).catch(error => error)
+  }
 
-    return(
+  useEffect(()=>{
+    selectedEmojiIndex(10);
+  }, [])
+  // console.log(FotoLista[0]['photo'])
+  const ListaFotos = ({item, index}) => {
+    // console.log('item: \n ', item['mood']);
+    // console.log('index: \n', index);
+    return (
+      <>
+      <View style={{ alignItems: 'center', alignSelf: 'center',}}> 
+      <Pressable
 
-        <KeyboardAwareScrollView >
+        onPress={() => {
+          selectedEmojiIndex(index);
+          setPhotoAtual(item['photo']);
+          setPhoto(item['id']);
+        } }
+        style={[item.selected ? styles.emojiselecionado : styles.emoji]}>
+        <Image
+          style={{
+            // resizeMode: 'contain',
+            // position: 'absolute',
+            alignSelf: 'center',
+            
+            // marginRight: 30,
+            // marginBottom: 10,
+            top: 4,
+            width: 92,
+            height: 92,
+            // alignSelf: 'center',
+            
+          }}
+          source={{
+            uri: item.photo,
+          }} />
+      </Pressable>
+      </View></>
+    );
+  };
+  
+  const selectedEmojiIndex = id => {
+    // alert(JSON.stringify(emojislist));
+    // console.log('id: ', id)
+    FotoLista.map((item, index) => {
+      if (index == id) {
+        // setIndex(index);
+        FotoLista[index].selected = true;
+      } else {
+        // setIndex(null);
+        FotoLista[index].selected = false;
+      }
+    });
+    setData([...FotoLista]);
+  };
 
-            <Modal 
-            onRequestClose={()=> Alert.alert('Atenção', 'Suas alterações não serão salvas, deseja mesmo sair?', [
+
+  return (
+    <KeyboardAwareScrollView>
+      <Modal
+        onRequestClose={() =>
+          Alert.alert(
+            'Atenção',
+            'Suas alterações não serão salvas, deseja mesmo sair?',
+            [
               {text: 'CANCELAR'},
               {
                 text: 'SIM',
@@ -100,259 +140,353 @@ const EditarPerfil = ({navigation, route}) => {
                   setModal(false);
                 },
               },
-            ])} 
-            visible={modal}
-            
-            >
-                <View>
-                    <TouchableOpacity
-                        style={styles.botaomodalsair}
-                        onPress={() => Alert.alert('Atenção', 'Suas alterações não serão salvas, deseja mesmo sair?', [
-                            {text: 'CANCELAR'},
-                            {
-                              text: 'SIM',
-                              onPress: () => {
-                                setModal(false);
-                              },
-                            },
-                          ])}>
-                    <Text style={{fontSize: 25, color: darkBlue}}>X</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.textoheaderperfil}>Selecione a foto do perfil</Text>
-                </View>
-            </Modal>
+            ],
+          )
+        }
+        visible={modal}>
+        <View style={{height: '100%'}}>
+          <TouchableOpacity
+            style={styles.botaomodalsair}
+            onPress={() =>
+              Alert.alert(
+                'Atenção',
+                'Suas alterações não serão salvas, deseja mesmo sair?',
+                [
+                  {text: 'CANCELAR'},
+                  {
+                    text: 'SIM',
+                    onPress: () => {
+                      setModal(false);
+                    },
+                  },
+                ],
+              )
+            }>
+            <Text style={{fontSize: 25, color: darkBlue}}>X</Text>
+          </TouchableOpacity>
+          <Text style={styles.textoheaderperfil}>
+            Selecione a foto do perfil
+          </Text>
+          <FlatList
+          columnWrapperStyle={{ width: '100%'}}
+          contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
+          key={'fotoss'}
+          numColumns={3}
+          style={styles.listaemoji}
+          // horizontal
+          data={FotoLista}
+          renderItem={ListaFotos}
+        />
+        {/* <Text>{photo}</Text> */}
+        {/* <Text>{gender}</Text> */}
+        <TouchableOpacity activeOpacity={0.5} onPress={()=> {setModal(false)}} style={styles.botaosalvarmodal}>
+          <Text style={styles.textosalvar}>Salvar</Text>
+        </TouchableOpacity>
+        {/* <Text>{photoAtual}</Text> */}
+        </View>
+      </Modal>
 
-            <View  style={styles.container}>
-            {/* <Text>{currentName}</Text>
+      <View style={styles.container}>
+        {/* <Text>{currentName}</Text>
             <Text>{currentEmail}</Text>
             <Text>{currentGender}</Text>
             <Text>{currentName}</Text>
             <Text>{data[0]}{data[1]}{data[2]}</Text> */}
-            <Image
-        style={styles.imagemeditar}
-        source={{
-          uri: `${currentPhoto}`,
-        }}
-      />
-      <TouchableOpacity activeOpacity={0.5} style={styles.botaoalterar}
-        onPress={()=>setModal(true)}
-      >
-        <Text style={styles.texto}>alterar foto</Text>
-      </TouchableOpacity>
-      <Text style={styles.nometexto}>nome</Text>
-      <TextInput editable={false} defaultValue={currentName} style={styles.caixatextonome} onChangeText={(newName)=>{
-        setName(newName)
-      }}/>
-      <Text style={styles.nomeemail}>email</Text>
-      <TextInput editable={false} enabled={false} defaultValue={currentEmail} style={styles.caixatextoemail} onChangeText={(newName)=>{
-        setEmail(newName)
-      }}/>
-      <Text style={styles.nomegender}>gênero</Text>
-      {/* <TextInput enabled={false} defaultValue={currentGender} style={styles.caixatextogenero} onChangeText={(newName)=>{
+        <Image
+          style={styles.imagemeditar}
+          source={{
+            uri: `${photoAtual}`,
+          }}
+        />
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={styles.botaoalterar}
+          onPress={() => setModal(true)}>
+          <Text style={styles.texto}>alterar foto</Text>
+        </TouchableOpacity>
+        <Text style={styles.nometexto}>nome</Text>
+        <TextInput
+          editable={false}
+          defaultValue={currentName}
+          style={styles.caixatextonome}
+          onChangeText={newName => {
+            setName(newName);
+          }}
+        />
+        <Text style={styles.nomeemail}>email</Text>
+        <TextInput
+          editable={false}
+          enabled={false}
+          defaultValue={currentEmail}
+          style={styles.caixatextoemail}
+          onChangeText={newName => {
+            setEmail(newName);
+          }}
+        />
+        <Text style={styles.nomegender}>gênero</Text>
+        {/* <TextInput enabled={false} defaultValue={currentGender} style={styles.caixatextogenero} onChangeText={(newName)=>{
         setEmail(newName)
       }}/> */}
-      
-      <DropDownPicker 
-      disableBorderRadius={true}
-    //   disableBorderRadius={true}
-      listMode='SCROLLVIEW' 
-containerStyle={styles.caixatextogenero}
-    //   labelStyle={{
-        
-    //     }}
-    //     border
-        labelStyle={{fontWeight: 'bold', borderRadius: 0,
-        fontFamily: fontePadrao,
-        textTransform: 'uppercase',}}
-        textStyle={{fontWeight: 'bold',
-        fontFamily: fontePadrao,
-        textTransform: 'uppercase'}}
-        placeholder={currentGender}
-        placeholderStyle={{fontWeight: 'bold', borderRadius: 0,
-        fontFamily: fontePadrao,
-        textTransform: 'uppercase',}}
-        disabledStyle={{borderRadius: 0,}}
-        modalTitleStyle={{borderRadius: 0,}}
-        modalContentContainerStyle={{borderRadius: 0}}
-        badgeStyle={{borderRadius: 0}}
-        tickIconStyle={{borderRadius: 0}}
-        itemSeparatorStyle={{borderRadius: 0}}
-        closeIconStyle={{borderRadius: 0}}
-        disabledItemContainerStyle={{borderRadius: 0}}
-        open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-    />
 
-      <Text style={styles.nomedata}>data de nascimento</Text>
-      <TextInput editable={false} defaultValue={`${birth[0]}/${birth[1]}/${birth[2]}`} style={styles.caixatextodata} onChangeText={(newName)=>{
-        setEmail(newName)
-      }}/>
-      
-      <TouchableOpacity activeOpacity={0.5} style={styles.botaosalvar}>
-        <Text style={styles.textosalvar}>Salvar</Text>
-      </TouchableOpacity>
+        <DropDownPicker
+          disableBorderRadius={true}
+          //   disableBorderRadius={true}
+          listMode="SCROLLVIEW"
+          containerStyle={styles.caixatextogenero}
+          //   labelStyle={{
+
+          //     }}
+          //     border
+          labelStyle={{
+            fontWeight: 'bold',
+            borderRadius: 0,
+            fontFamily: fontePadrao,
+            textTransform: 'uppercase',
+          }}
+          textStyle={{
+            fontWeight: 'bold',
+            fontFamily: fontePadrao,
+            textTransform: 'uppercase',
+          }}
+          placeholder={currentGender}
+          placeholderStyle={{
+            fontWeight: 'bold',
+            borderRadius: 0,
+            fontFamily: fontePadrao,
+            textTransform: 'uppercase',
+          }}
+          disabledStyle={{borderRadius: 0}}
+          modalTitleStyle={{borderRadius: 0}}
+          modalContentContainerStyle={{borderRadius: 0}}
+          badgeStyle={{borderRadius: 0}}
+          tickIconStyle={{borderRadius: 0}}
+          itemSeparatorStyle={{borderRadius: 0}}
+          closeIconStyle={{borderRadius: 0}}
+          disabledItemContainerStyle={{borderRadius: 0}}
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+        />
+
+        <Text style={styles.nomedata}>data de nascimento</Text>
+        <TextInput
+          editable={false}
+          defaultValue={`${dataNas[0]}/${dataNas[1]}/${dataNas[2]}`}
+          style={styles.caixatextodata}
+          onChangeText={newName => {
+            setEmail(newName);
+          }}
+        />
+
+        <TouchableOpacity activeOpacity={0.5} onPress={()=> {
+          AtualizarUsuario();
+          navigation.navigate('PerfilHome');
+        }} style={styles.botaosalvar}>
+          <Text style={styles.textosalvar}>Salvar</Text>
+        </TouchableOpacity>
       </View>
-        </KeyboardAwareScrollView>
-
-    )
+    </KeyboardAwareScrollView>
+  );
 };
 
 export default EditarPerfil;
 const styles = StyleSheet.create({
-    textoheaderperfil:{
-        color: 'black',
-        fontWeight: 'bold',
-        fontFamily: fontePadrao,
-        fontSize: 24,
-        alignSelf: 'center',
-        top: 100,
-        position: 'absolute',
-    },
-    botaomodalsair: {
-        position: 'absolute',
-        top: 10,
-        left: '6%',
-        borderRadius: 10,
-        justifyContent: 'center',
-        width: 40,
-        height: 40,
-        backgroundColor: lightBlue,
-        alignItems: 'center',
-      },
-    textosalvar:{
-        color: 'white',
-        fontWeight: 'bold',
-        fontFamily: fontePadrao,
-        textTransform: 'uppercase',
-    },
-    botaosalvar: {
-        borderRadius: 10,
+  botaosalvarmodal: {
+    borderRadius: 10,
 
-        backgroundColor: darkBlue,
-        position: 'absolute',
-        top: '90%',
-        height: '5%',
-        width: '75%',
-        height: '06%',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    caixatextodata: {
-        borderRadius: 10,
+    backgroundColor: darkBlue,
+    position: 'absolute',
+    top: '80%',
+    height: '5%',
+    width: '75%',
+    height: '06%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  emoji: {
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    alignSelf: 'center',
+    width: 100,
+    height: 100,
+    borderRadius: 40,
+    alignSelf: 'center',
+    // backgroundColor: 'pink'
+  },
+  emojiselecionado: {
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // alignSelf: 'center',
+    width: 100,
+    height: 100,
+    backgroundColor: '#304FFE',
+    // margin: 10,
+    borderRadius: 50,
+    // marginRight: 10,
+  },
+  listaemoji: {
+    // position: 'absolute',
+    alignSelf: 'center',
+    top: '20%',
+    // height: 400,
+    width: '100%',
+    // justifyContent: 'center',
+    // alignItems: 'center'
+    // backgroundColor: 'cyan'
+    // marginRight: 10,
+  },
+  textoheaderperfil: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontFamily: fontePadrao,
+    fontSize: 24,
+    alignSelf: 'center',
+    top: 100,
+    position: 'absolute',
+  },
+  botaomodalsair: {
+    position: 'absolute',
+    top: 10,
+    left: '6%',
+    borderRadius: 10,
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+    backgroundColor: lightBlue,
+    alignItems: 'center',
+  },
+  textosalvar: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontFamily: fontePadrao,
+    textTransform: 'uppercase',
+  },
+  botaosalvar: {
+    borderRadius: 10,
 
-        zIndex: -5,
-        position: 'absolute',
-        left: '12%',
-        top: '73%',
-        backgroundColor: 'white',
-        color: 'black',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        width: '75%',
-        borderWidth: 1,
-        paddingLeft: '3%',
-    },
-    nomedata: {
-        zIndex: -5,
-        position: 'absolute',
-        top: '70%',
-        fontWeight: 'bold',
-        fontFamily: fontePadrao,
-        textTransform: 'uppercase',
-        left: '12%',
-    },
-    caixatextogenero: {
-        
-        borderRadius: 10,
-        position: 'absolute',
-        left: '12%',
-        top: '63%',
-        // backgroundColor: 'white',
-        color: 'black',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        width: '75%',
-        // borderWidth: 1,
-        // paddingLeft: '3%',
-    },
-    nomegender: {
-        position: 'absolute',
-        top: '60%',
-        fontWeight: 'bold',
-        fontFamily: fontePadrao,
-        textTransform: 'uppercase',
-        left: '12%',
-    },
-    nomeemail: {
-        position: 'absolute',
-        top: '50%',
-        fontWeight: 'bold',
-        fontFamily: fontePadrao,
-        textTransform: 'uppercase',
-        left: '12%',
-    },
-    caixatextoemail: {
-        borderRadius: 10,
-        position: 'absolute',
-        left: '12%',
-        top: '53%',
-        backgroundColor: 'white',
-        color: 'black',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        width: '75%',
-        borderWidth: 1,
-        paddingLeft: '3%',
-    },
-    caixatextonome:{
-                borderRadius: 10,
+    backgroundColor: darkBlue,
+    position: 'absolute',
+    top: '90%',
+    height: '5%',
+    width: '75%',
+    height: '06%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  caixatextodata: {
+    borderRadius: 10,
 
-        position: 'absolute',
-        left: '12%',
-        top: '42%',
-        backgroundColor: 'white',
-        color: 'black',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        width: '75%',
-        borderWidth: 1,
-        paddingLeft: '3%',
-    }, 
-    nometexto: {
-        position: 'absolute',
-        top: '39%',
-        fontWeight: 'bold',
-        fontFamily: fontePadrao,
-        textTransform: 'uppercase',
-        left: '12%',
-    },
-    texto: {
-        fontFamily: fontePadrao,
-        fontWeight: '900',  
-        textTransform: 'uppercase',
-        color: darkBlue,
-    },
-    botaoalterar: {
-        backgroundColor: lightBlue,
-        position: 'absolute',
-        top: '29%',
-        height: '5%',
-        width: '42%',
-        alignItems: 'center',
-        justifyContent: 'center',
-       
-    },
-    imagemeditar: {
-        position: 'absolute',
-        width: 128,
-        height: 128,
-        borderRadius: 128 / 2,
-        top: '09%',
-    },
+    zIndex: -5,
+    position: 'absolute',
+    left: '12%',
+    top: '73%',
+    backgroundColor: 'white',
+    color: 'black',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    width: '75%',
+    borderWidth: 1,
+    paddingLeft: '3%',
+  },
+  nomedata: {
+    zIndex: -5,
+    position: 'absolute',
+    top: '70%',
+    fontWeight: 'bold',
+    fontFamily: fontePadrao,
+    textTransform: 'uppercase',
+    left: '12%',
+  },
+  caixatextogenero: {
+    borderRadius: 10,
+    position: 'absolute',
+    left: '12%',
+    top: '63%',
+    // backgroundColor: 'white',
+    color: 'black',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    width: '75%',
+    // borderWidth: 1,
+    // paddingLeft: '3%',
+  },
+  nomegender: {
+    position: 'absolute',
+    top: '60%',
+    fontWeight: 'bold',
+    fontFamily: fontePadrao,
+    textTransform: 'uppercase',
+    left: '12%',
+  },
+  nomeemail: {
+    position: 'absolute',
+    top: '50%',
+    fontWeight: 'bold',
+    fontFamily: fontePadrao,
+    textTransform: 'uppercase',
+    left: '12%',
+  },
+  caixatextoemail: {
+    borderRadius: 10,
+    position: 'absolute',
+    left: '12%',
+    top: '53%',
+    backgroundColor: 'white',
+    color: 'black',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    width: '75%',
+    borderWidth: 1,
+    paddingLeft: '3%',
+  },
+  caixatextonome: {
+    borderRadius: 10,
+
+    position: 'absolute',
+    left: '12%',
+    top: '42%',
+    backgroundColor: 'white',
+    color: 'black',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    width: '75%',
+    borderWidth: 1,
+    paddingLeft: '3%',
+  },
+  nometexto: {
+    position: 'absolute',
+    top: '39%',
+    fontWeight: 'bold',
+    fontFamily: fontePadrao,
+    textTransform: 'uppercase',
+    left: '12%',
+  },
+  texto: {
+    fontFamily: fontePadrao,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+    color: darkBlue,
+  },
+  botaoalterar: {
+    backgroundColor: lightBlue,
+    position: 'absolute',
+    top: '29%',
+    height: '5%',
+    width: '42%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imagemeditar: {
+    position: 'absolute',
+    width: 128,
+    height: 128,
+    borderRadius: 128 / 2,
+    top: '09%',
+  },
   botaoSair: {
     alignSelf: 'center',
     width: '133%',
@@ -371,7 +505,7 @@ const styles = StyleSheet.create({
       textTransform: 'uppercase',
     },
   },
- 
+
   info: {
     // maxWidth: 200,
     width: 300, // position: 'absolute',
@@ -413,4 +547,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-

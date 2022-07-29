@@ -14,8 +14,8 @@ const Login = ({navigation}) => {
         Age: refresh_token
     };
     const [status, setStatus] = useState(0);
-    const [email, setEmail] = useState("lucas7@email.com");
-    const [password, setPassword] = useState("senhasenha");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [msgErro, setMsgErro] = useState('');
     const [botao, setBotao] = useState(false);
     const [count, setCount] = useState(0);
@@ -119,7 +119,13 @@ const Login = ({navigation}) => {
         <KeyboardAvoidingView style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
 
-            <Text>{params}</Text>
+            {/* <Text>{params}</Text> */}
+
+            <Image
+                resizeMode='contain'
+                source={require('../assets/login.png')}
+                style={styles.loginLogo}
+            />
             <TextInput 
                 style={{
                     width: '80%',
@@ -144,14 +150,16 @@ const Login = ({navigation}) => {
                 onChangeText={text => setPassword(text)}
             />
            
-           <Button title='login' onPress={()=> {setBotao(true)
-            console.log('Botao clicado')}}/>
+           <TouchableOpacity 
+                activeOpacity={0.8} 
+                style={styles.botao_entrar}
+                onPress={()=>{setBotao(true)}}
+            >
+                <Text style={styles.texto_botao}>Entrar</Text>
+            </TouchableOpacity>
            <Text style={{fontSize: 20, color: 'orange', fontWeight: 'bold'}}
-           >HTTP: {msgErro}</Text>
-            <Text style={{fontSize: 20, color: 'orange', fontWeight: 'bold'}}
-           >{botao ? 'true' : 'false'}</Text>
-            <Text style={{fontSize: 20, color: 'orange', fontWeight: 'bold'}}
-           >{count}</Text>
+           >{msgErro}</Text>
+            
 
         </KeyboardAvoidingView>
     )

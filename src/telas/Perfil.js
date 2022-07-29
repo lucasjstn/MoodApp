@@ -13,7 +13,7 @@ import {
   Alert,
   Modal,
 } from 'react-native';
-import {darkBlue, fontePadrao, generosTrad, lightColor} from '../constantes';
+import {darkBlue, fontePadrao, FotoLista, generosTrad, lightColor} from '../constantes';
 import EditarPerfil from './Modal/EditarPerfil';
 
 const PerfilHome = ({navigation, route}) => {
@@ -32,9 +32,15 @@ const PerfilHome = ({navigation, route}) => {
         setAcess_token(value);
       }
     } catch (e) {
-      console.warn(e);
+      // console.warn(e);
     }
   };
+
+  useEffect(()=>{
+    setTimeout(() => {
+      DadosUsuario();
+    }, 10);
+  })
 
   useEffect(() => {
     // console.log('token atual: \n', access_token);
@@ -44,7 +50,7 @@ const PerfilHome = ({navigation, route}) => {
 
   const config = {
     headers: {
-      Authorization: `Bearer SONT01TchVfze1xoNIBKMavhpmo9l-Ijk4uNUUorlIs          `,
+      Authorization: `Bearer ${access_token}`,
     },
   };
 
@@ -56,7 +62,7 @@ const PerfilHome = ({navigation, route}) => {
         .then(response => {
           setUserData(response?.data);
         })
-        .catch(error => console.warn(error));
+        .catch(error => error);
     } catch (error) {}
   };
   if (userData == null)
@@ -66,7 +72,9 @@ const PerfilHome = ({navigation, route}) => {
       </View>
     );
 
-  console.log(userData);
+    const photo = FotoLista[''];
+      // console.log(userData['photo']['id'], FotoLista[0])
+  // console.log(userData);
   const ano = userData['birthdate'].slice(0, 4);
   const mes = userData['birthdate'].slice(5, 7);
   const dia = userData['birthdate'].slice(8, 10);
@@ -75,14 +83,14 @@ const PerfilHome = ({navigation, route}) => {
       <Image
         style={styles.image}
         source={{
-          uri: `https://shrouded-shelf-01513.herokuapp.com${userData['photo']['url']}`,
+          uri: `${FotoLista[userData['photo']['id']-1]['photo']}`,
         }}
       />
 
-      <Text>access: {access_token}</Text>
+      {/* <Text>access: {access_token}</Text> */}
       <View
         style={{
-          backgroundColor: 'pink',
+          // backgroundColor: 'pink',
           maxWidth: '80%',
           height: 100,
           width: '80%',
@@ -116,11 +124,12 @@ const PerfilHome = ({navigation, route}) => {
           style={styles.botaoSalvar}
           onPress={() => {
             navigation.navigate('EditarPerfil', {
-                currentPhoto: `https://shrouded-shelf-01513.herokuapp.com${userData['photo']['url']}`,
+                currentPhoto: `${FotoLista[userData['photo']['id']-1]['photo']}`,
                 currentName: userData['name'],
                 currentEmail: userData['email'],
                 currentGender: generosTrad[userData['gender']],
                 currentBirth: JSON.stringify([dia, mes, ano]),
+                access_token: access_token,
 
             });
           }}>

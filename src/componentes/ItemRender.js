@@ -29,7 +29,7 @@ const ItemRender = ({icone1, icone2, icone3,navigation, id, mood, created_at, up
       onPress={navigation}
     >
         <Image source={emoji} style={styles.box.imagem_emoji} />
-        <Text style={styles.itemText}> {id} </Text>
+        {/* <Text style={styles.itemText}> {id} </Text> */}
 
         <View style={{ position: 'absolute', top: '23%', left: '25%', flexDirection: 'row' }}>
 

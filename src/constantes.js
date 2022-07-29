@@ -65,9 +65,36 @@ export const emojis = [
           humor: 'terrible',
         },
     ]
-export const atividades = {
-    
-}
+
+    export const FotoLista = [
+      {
+        id: '1', 
+        photo: `https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_1.png`,
+      },
+      {
+        id: '2',
+        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_2.png',
+      },
+      {
+        id: '3',
+        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_3.png',
+      },
+      {
+        id: '4',
+        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_4.png',
+      },
+      {
+      
+        id: '5',
+        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_5.png',
+      },
+      {
+      
+        id: '6',
+        photo: 'https://shrouded-shelf-01513.herokuapp.com/assets/images/avt_6.png',
+
+      },
+  ]
 
 export const darkBlue = '#304FFE';
 export const lightColor = '#F5F5F5';

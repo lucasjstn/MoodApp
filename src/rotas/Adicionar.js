@@ -197,7 +197,7 @@ function Adicionar({navigation}) {
             size={15}
             style={{top: 2, padding: 2}}
           />
-          <Text style={styles.textodata}> asdasdas</Text>
+          <Text style={styles.textodata}> HOJE, 29 DE JULHO</Text>
           <Ionic
             name="time-outline"
             size={15}
@@ -221,8 +221,8 @@ function Adicionar({navigation}) {
           renderItem={ListEmoji}
         />
        
-       <Text>{humor} Atividades: {atividade1} {atividade2} {atividade3} {descricao}</Text>
-       <Text>{access_token.length}</Text>
+       <Text>{}  {} {} {} {}</Text>
+       <Text>{}</Text>
         <View style={styles.atividadescontainer}>
           {/* primeira fileira de icones */}
 
