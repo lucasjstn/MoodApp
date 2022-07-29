@@ -26,8 +26,7 @@ const Home = ({navigation}) => {
         CapturarEntradas();
         console.log(access_token)
         // console.log(cards);
-    }, [access_token])
-
+    }, [access_token, isFocused])
 
     const getData = async (key) => {
         try {

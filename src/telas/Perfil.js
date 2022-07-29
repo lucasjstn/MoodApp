@@ -150,10 +150,10 @@ const PerfilHome = ({navigation, route}) => {
                 onPress: () => {
                   LimparStorage('@login');
                   navigation.navigate('Login');
-                  axios.get(
-                    `https://shrouded-shelf-01513.herokuapp.com/daily_entries`,
-                    config,
-                  );
+                  // axios.get(
+                  //   `https://shrouded-shelf-01513.herokuapp.com/daily_entries`,
+                  //   config,
+                  // );
                 },
               },
             ]);

@@ -148,12 +148,13 @@ console.log()
         <View style={{ position: 'absolute', top: '80%', alignSelf: 'center',width: '88%', }}>
           <TouchableOpacity 
           onPress={()=>{
-            axios.delete(`https://shrouded-shelf-01513.herokuapp.com/daily_entries/${id}`, config).then(()=> {
+            axios.delete(`https://shrouded-shelf-01513.herokuapp.com/daily_entries/${id}`, config)
+            .then(()=> {
               navigation.navigate('Cartao', {
                 
               });
             }).catch(error => console.log(error)) ;
-            axios.post
+            
           }}
           activeOpacity={0.1} style={{backgroundColor: darkBlue, height: 50, justifyContent: 'center'}}>
             <Text style={{alignSelf: 'center', textTransform: 'uppercase', color: 'white', fontWeight: 'bold'}}>Remover</Text>

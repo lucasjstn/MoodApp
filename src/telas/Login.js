@@ -23,10 +23,11 @@ const Login = ({navigation}) => {
     const [userInfo, setUserInfo] = useState({});
     const [params, setParams] = useState('');
     const [loggedIn, setLoggedIn] = useState('')
+    const [editable, setEditable] = useState(true);
     
-    useEffect(() => {
-        AsyncStorage.removeItem('@login');
-    }, [])
+    // useEffect(() => {
+    //     AsyncStorage.removeItem('@login');
+    // }, [])
     useEffect(()=>{
         // console.log('mount');
         // console.log('email: ', email);
@@ -67,14 +68,6 @@ const Login = ({navigation}) => {
             
     }, [botao])
 
-    const storeData = async (value) => {
-        try {
-            // console.log(value);
-          await AsyncStorage.setItem('@login', value)
-        } catch (e) {
-          // saving error
-        }
-      }
 
 
     useEffect(()=>{
@@ -90,18 +83,22 @@ const Login = ({navigation}) => {
             // setMsgErro('Logado');
             setBotao(false);
             
-            navigation.navigate('BottomTab');
+            navigation.reset({
+                index: 0,
+                routes: [{name: 'BottomTab'}]
+            });
         }
 
     }, [status])
 
     useEffect(()=>{
-
+        var contador = 0;
         setCount(0);
         if(count == 5){
             setMsgErro('Tentativas Bloqueadas')
             setEmail('');
             setPassword('');
+            
         }
         
     }, [count == 5])
@@ -123,12 +120,15 @@ const Login = ({navigation}) => {
                     "client_secret": "389JLi1Nd6DQ_soCI85C57ueTlMZ_JR7pRq6SJ0GaB0",
                 }
             )
-            .then(response => {
+            .then( async (response) => {
                 // params = response?.data.access_token;
                 // console.log(response?.data.access_token, "\n",response?.data.refresh_token)
                 setStatus(response.status);
-                setParams (response?.data.access_token);
-                storeData(response?.data.access_token)
+                // setParams (response?.data.access_token);
+                // storeData(response?.data.access_token)
+                setEmail('');
+                setPassword('');
+                await AsyncStorage.setItem('@login', response?.data.access_token)
             })
             .catch(error => { console.log(error);setStatus(error.response.status)})
     }
@@ -149,6 +149,7 @@ const Login = ({navigation}) => {
                 style={styles.loginLogo}
             />
             <TextInput 
+                editable={editable}
                 style={styles.entradas}
                 placeholder='email'
                 defaultValue={email}
