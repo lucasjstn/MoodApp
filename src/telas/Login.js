@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { TextInput, Image, KeyboardAvoidingView, StatusBar, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fontePadrao } from '../constantes';
 
 const Login = ({navigation}) => {
     
@@ -21,10 +22,31 @@ const Login = ({navigation}) => {
     const [count, setCount] = useState(0);
     const [userInfo, setUserInfo] = useState({});
     const [params, setParams] = useState('');
-
+    const [loggedIn, setLoggedIn] = useState('')
+    
     useEffect(() => {
         AsyncStorage.removeItem('@login');
     }, [])
+    useEffect(()=>{
+        // console.log('mount');
+        // console.log('email: ', email);
+        // console.log('senha: ', password);
+        // console.log('status: ', status);
+        // FazerLogin();
+        if(botao == true){
+            if(email.length == 0 || password.length == 0){
+                setMsgErro('Os campos não podem estar vazios.')
+                setBotao(false);
+                setCount(count + 1);
+            } else { 
+                FazerLogin();
+                setBotao(false);
+            }   
+            
+        }
+            
+    }, [botao])
+
     useEffect(()=>{
         // console.log('mount');
         // console.log('email: ', email);
@@ -65,7 +87,7 @@ const Login = ({navigation}) => {
         } 
          else if(status == 200){
             
-            setMsgErro('Logado');
+            // setMsgErro('Logado');
             setBotao(false);
             
             navigation.navigate('BottomTab');
@@ -127,25 +149,15 @@ const Login = ({navigation}) => {
                 style={styles.loginLogo}
             />
             <TextInput 
-                style={{
-                    width: '80%',
-                    backgroundColor: 'white',
-                    color: 'black',
-                    margin: 10,
-                }}
-
+                style={styles.entradas}
+                placeholder='email'
                 defaultValue={email}
                 onChangeText={text => setEmail(text)}
             />
 
             <TextInput 
-                style={{
-                    width: '80%',
-                    backgroundColor: 'white',
-                    color: 'black',
-                    margin: 10,
-                }}
-                
+                placeholder='senha'
+                style={styles.entradas}
                 defaultValue={password}
                 onChangeText={text => setPassword(text)}
             />
@@ -157,7 +169,7 @@ const Login = ({navigation}) => {
             >
                 <Text style={styles.texto_botao}>Entrar</Text>
             </TouchableOpacity>
-           <Text style={{fontSize: 20, color: 'orange', fontWeight: 'bold'}}
+           <Text style={{width: '88%', textAlign: 'center', top: '10%',fontSize: 20, color: 'orange', fontWeight: 'bold'}}
            >{msgErro}</Text>
             
 
@@ -168,13 +180,23 @@ const Login = ({navigation}) => {
 
 
 const styles = StyleSheet.create({
+    entradas: {
+        paddingLeft: 10,
+        width: '80%',
+        backgroundColor: 'white',
+        margin: 5,
+        borderRadius: 10,
+        top: '13%',
+        // position: 'absolute',
+    },
     container: {
         display: 'flex',
-        height: '100%',
+        height: 896,
         backgroundColor: '#304FFE',
         alignItems: 'center',
       },
       loginLogo: {
+        top: 92,
         width: 228,
         height: 228,
 
@@ -187,10 +209,12 @@ const styles = StyleSheet.create({
         height: 46,
         borderRadius: 10,
         top: 1,
+        top: '22%'
        },
        texto_botao: {
+        
         color: '#304FFE',
-        fontFamily: 'Source Sans Pro',
+        fontFamily: fontePadrao,
         fontSize: 15,
         fontWeigth: 'bold',
         textTransform: 'uppercase',

@@ -86,7 +86,7 @@ const Home = ({navigation}) => {
     const abrirCartao = (rota, payload) => {
       navigation.navigate(rota, payload);
     }
-
+    
       const Cartao = ({navigation}) => {
           return(
               <SafeAreaView>
@@ -112,6 +112,7 @@ const Home = ({navigation}) => {
                               atividade1: item.activities[0].name,
                               atividade2: item.activities[1].name,
                               atividade3: item.activities[2].name,
+                              created_at: cards[0].created_at,
                             })}
                             />}
                       keyExtractor={item => item.id}

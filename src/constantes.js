@@ -66,6 +66,21 @@ export const emojis = [
         },
     ]
 
+  export  const meses = [
+      'janeiro',
+      'fevereiro',
+      'março',
+      'abril',
+      'maio',
+      'junho',
+      'julho',
+      'agosto',
+      'setembro',
+      'outubro',
+      'novembro',
+      'dezembro',
+    ]
+
     export const FotoLista = [
       {
         id: '1', 

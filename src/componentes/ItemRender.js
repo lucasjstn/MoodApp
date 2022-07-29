@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { atividadesicones, atividadesicones1, emojis, fontePadrao } from "../constantes";
+import { atividadesicones, atividadesicones1, emojis, fontePadrao, meses } from "../constantes";
 import dateFormat, { masks} from "dateformat";
+import { create } from "react-test-renderer";
 
 const now = new Date();
 
@@ -19,8 +20,26 @@ const ItemRender = ({icone1, icone2, icone3,navigation, id, mood, created_at, up
 
   const [createdat, setCreatedat] = useState('');
   // created_at = new Date();
+  const now = new Date().getDate();
+  const mesNow = new Date().getMonth();
   const date = created_at.slice(0, 10);
   const hour = created_at.slice(11, 16);
+  const dia = created_at.slice(8, 10);
+  const hourNow = new Date(created_at);
+  var hojeOntem = '';
+  if(now == dia){
+    hojeOntem = 'hoje,'
+  } else if(now == (dia -1)) {
+    hojeOntem == 'ontem,'
+  } else {
+    hojeOntem = '';
+  }
+  
+  // console.log('no itemrender', created_at);
+  // console.log(mesNow)
+  console.log()
+
+  
 
   return (
     <><TouchableOpacity
@@ -39,11 +58,11 @@ const ItemRender = ({icone1, icone2, icone3,navigation, id, mood, created_at, up
                 : mood === 'terrible' ? <Text style={styles.mal}>ACABADO</Text>
                   : mood === 'radiant' ? <Text style={styles.radiante}>RADIANTE</Text>
                     : null}
-          <Text style={{ top: 10, left: 5 }}>{hour}</Text>
+          <Text style={{fontSize: 16,textTransform: 'uppercase', color: '#ACACAC', fontWeight: '400', top: 7, left: 5 }}>{hourNow.toLocaleTimeString().slice(0, 5)}</Text>
         </View>
 
 
-        <Text style={{ position: 'absolute', left: '24.9%', top: '10%' }}>{date}</Text>
+        <Text style={{fontSize: 16,textTransform: 'uppercase', color: '#ACACAC', fontWeight: '400', position: 'absolute', left: '24.9%', top: '10%' }}>{hojeOntem} {dia} De {meses[mesNow]}</Text>
 
 
         <View style={{ flexDirection: 'row', alignSelf: 'center', width: '95%', height: 40, top: '50%', position: 'absolute', left: 30, }}>

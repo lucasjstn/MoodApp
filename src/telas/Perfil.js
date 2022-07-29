@@ -78,6 +78,11 @@ const PerfilHome = ({navigation, route}) => {
   const ano = userData['birthdate'].slice(0, 4);
   const mes = userData['birthdate'].slice(5, 7);
   const dia = userData['birthdate'].slice(8, 10);
+
+  const LimparStorage = async (key) => {
+    await AsyncStorage.removeItem('@login').then(()=> navigation.navigate('Login'));
+  }
+
   return (
     <View style={styles.container}>
       <Image
@@ -143,6 +148,7 @@ const PerfilHome = ({navigation, route}) => {
               {
                 text: 'SIM',
                 onPress: () => {
+                  LimparStorage('@login');
                   navigation.navigate('Login');
                   axios.get(
                     `https://shrouded-shelf-01513.herokuapp.com/daily_entries`,

@@ -20,7 +20,7 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {d, darkBlue, emojislist, lightBlue, lightColor} from '../constantes';
+import {d, darkBlue, emojislist, lightBlue, lightColor, meses} from '../constantes';
 import {Item2render, ListEmoji} from '../componentes/ItemRender';
 import {emojis} from '../constantes';
 import Ionic from 'react-native-vector-icons/Ionicons';
@@ -176,7 +176,13 @@ function Adicionar({navigation}) {
     });
     setData([...emojislist]);
   };
-
+  
+  const dateNow = new Date().getDate();
+  const hourNow = new Date().getHours()
+  const minutesNow = new Date().getMinutes();
+  const monthNow = new Date().getMonth();
+  console.log(dateNow);
+  console.log(minutesNow)
 
   return (
     <ScrollView style={{flexGrow: 1}}>
@@ -197,14 +203,14 @@ function Adicionar({navigation}) {
             size={15}
             style={{top: 2, padding: 2}}
           />
-          <Text style={styles.textodata}> HOJE, 29 DE JULHO</Text>
+          <Text style={styles.textodata}> HOJE, {dateNow} DE {meses[monthNow]}</Text>
           <Ionic
             name="time-outline"
             size={15}
             color={'#969696'}
             style={{top: 2, padding: 2}}
           />
-          <Text style={styles.textodata}>8:05</Text>
+          <Text style={styles.textodata}>{hourNow}:{minutesNow}</Text>
 
           
         </View>

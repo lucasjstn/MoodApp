@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { atividadesicones, darkBlue, emojis, fontePadrao, lightBlue, nomeAtividades } from '../constantes'
+import { atividadesicones, darkBlue, emojis, fontePadrao, lightBlue, meses, nomeAtividades } from '../constantes'
 import  Icon  from 'react-native-vector-icons/Ionicons';
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import { useFocusEffect } from "@react-navigation/native";
+import { create } from "react-test-renderer";
 const CartaoAberto = ({route, navigation}) => {
     
     const [data, setData] = useState(null)
@@ -14,8 +15,21 @@ const CartaoAberto = ({route, navigation}) => {
     }, [data])
     
 
-    const { id, token, atividade1, atividade2, atividade3} = route.params;
+    const { id, token, atividade1, atividade2, atividade3, created_at} = route.params;
 
+    const now = new Date().getDate();
+  const mesNow = new Date().getMonth();
+  const date = created_at.slice(0, 10);
+  const hour = created_at.slice(11, 16);
+  const dia = created_at.slice(8, 10);
+  var hojeOntem = '';
+  if(now == dia){
+    hojeOntem = 'hoje'
+  } else if(now == (dia -1)) {
+    hojeOntem == 'ontem'
+  }
+  const d = new Date(created_at);
+console.log()
     const config = {
         headers: {'Authorization': `Bearer ${token}`}
     }
@@ -33,6 +47,7 @@ const CartaoAberto = ({route, navigation}) => {
 
     if(data == null) return <View style={{flex: 1, justifyContent: 'center'}}><ActivityIndicator size={"large"} color={'blue'}/></View>
     // console.log(data.activities[0])
+    // console.log(data.created_at)
     return (
         <View style={styles.container}>
             <TouchableOpacity
@@ -50,7 +65,7 @@ const CartaoAberto = ({route, navigation}) => {
             color={'#969696'}
             style={{top: 2, padding: 2}}
             />
-            <Text style={styles.textodata}>8:05</Text>
+            <Text style={styles.textodata}>{d.toLocaleTimeString().slice(0, 5)}</Text>
          </View>
 
             <View style={styles.containertextohora}>
@@ -59,7 +74,7 @@ const CartaoAberto = ({route, navigation}) => {
                 size={15}
                 style={{top: 2, padding: 2}}
                 />
-                <Text style={styles.textodata}>hoje, 23 de janeiro </Text>
+                <Text style={styles.textodata}>{hojeOntem}, {now} de {meses[mesNow]} </Text>
             </View>
 
 
