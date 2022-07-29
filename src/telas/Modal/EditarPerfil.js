@@ -15,14 +15,28 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {FlatList, ScrollView, TextInput} from 'react-native-gesture-handler';
-import {darkBlue, emojislist, fontePadrao, FotoLista, lightBlue, lightColor} from '../../constantes';
+import {
+  darkBlue,
+  emojislist,
+  fontePadrao,
+  FotoLista,
+  lightBlue,
+  lightColor,
+} from '../../constantes';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const EditarPerfil = ({navigation, route}) => {
-  const {currentPhoto, currentName, currentEmail, currentGender, currentBirth, access_token} =
-    route.params;
+  const {
+    currentPhoto,
+    currentName,
+    currentEmail,
+    currentGender,
+    currentBirth,
+    access_token,
+    photoId
+  } = route.params;
   const dataNas = JSON.parse(currentBirth);
   const [data, setData] = useState([]);
   const [name, setName] = useState(currentName);
@@ -47,12 +61,8 @@ const EditarPerfil = ({navigation, route}) => {
     },
   ]);
   const [modal, setModal] = useState(false);
-  // console.log(value);
-  // console.log(birth);
   const [photo, setPhoto] = useState(0);
-  // console.log(photo)
-  // const EditarUsuário
-  // console.log(items);
+
   // console.log(value);
   const config = {
     headers: {
@@ -61,54 +71,61 @@ const EditarPerfil = ({navigation, route}) => {
   };
   // console.log(access_token);
   const AtualizarUsuario = () => {
-    axios.put('https://shrouded-shelf-01513.herokuapp.com/user', {
-      "user": {
-        "gender": value,
-        "photo_id": photo,
-    }
-    }, config).then(response => response).catch(error => error)
-  }
-
-  useEffect(()=>{
+    axios
+      .put(
+        'https://shrouded-shelf-01513.herokuapp.com/user',
+        {
+          user: {
+            gender: value,
+            photo_id: photo == 0 ? photoId : photo,
+          },
+        },
+        config,
+      )
+      .then(response => response)
+      .catch(error => console.log(error));
+  };
+  console.log(currentPhoto)
+  useEffect(() => {
     selectedEmojiIndex(10);
-  }, [])
+  }, []);
   // console.log(FotoLista[0]['photo'])
   const ListaFotos = ({item, index}) => {
     // console.log('item: \n ', item['mood']);
     // console.log('index: \n', index);
     return (
       <>
-      <View style={{ alignItems: 'center', alignSelf: 'center',}}> 
-      <Pressable
+        <View style={{alignItems: 'center', alignSelf: 'center'}}>
+          <Pressable
+            onPress={() => {
+              selectedEmojiIndex(index);
+              setPhotoAtual(item['photo']);
+              setPhoto(item['id']);
+            }}
+            style={[item.selected ? styles.emojiselecionado : styles.emoji]}>
+            <Image
+              style={{
+                // resizeMode: 'contain',
+                // position: 'absolute',
+                alignSelf: 'center',
 
-        onPress={() => {
-          selectedEmojiIndex(index);
-          setPhotoAtual(item['photo']);
-          setPhoto(item['id']);
-        } }
-        style={[item.selected ? styles.emojiselecionado : styles.emoji]}>
-        <Image
-          style={{
-            // resizeMode: 'contain',
-            // position: 'absolute',
-            alignSelf: 'center',
-            
-            // marginRight: 30,
-            // marginBottom: 10,
-            top: 4,
-            width: 92,
-            height: 92,
-            // alignSelf: 'center',
-            
-          }}
-          source={{
-            uri: item.photo,
-          }} />
-      </Pressable>
-      </View></>
+                // marginRight: 30,
+                // marginBottom: 10,
+                top: 4,
+                width: 92,
+                height: 92,
+                // alignSelf: 'center',
+              }}
+              source={{
+                uri: item.photo,
+              }}
+            />
+          </Pressable>
+        </View>
+      </>
     );
   };
-  
+
   const selectedEmojiIndex = id => {
     // alert(JSON.stringify(emojislist));
     // console.log('id: ', id)
@@ -123,7 +140,6 @@ const EditarPerfil = ({navigation, route}) => {
     });
     setData([...FotoLista]);
   };
-
 
   return (
     <KeyboardAwareScrollView>
@@ -168,21 +184,29 @@ const EditarPerfil = ({navigation, route}) => {
             Selecione a foto do perfil
           </Text>
           <FlatList
-          columnWrapperStyle={{ width: '100%'}}
-          contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
-          key={'fotoss'}
-          numColumns={3}
-          style={styles.listaemoji}
-          // horizontal
-          data={FotoLista}
-          renderItem={ListaFotos}
-        />
-        {/* <Text>{photo}</Text> */}
-        {/* <Text>{gender}</Text> */}
-        <TouchableOpacity activeOpacity={0.5} onPress={()=> {setModal(false)}} style={styles.botaosalvarmodal}>
-          <Text style={styles.textosalvar}>Salvar</Text>
-        </TouchableOpacity>
-        {/* <Text>{photoAtual}</Text> */}
+            columnWrapperStyle={{width: '100%'}}
+            contentContainerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            key={'fotoss'}
+            numColumns={3}
+            style={styles.listaemoji}
+            // horizontal
+            data={FotoLista}
+            renderItem={ListaFotos}
+          />
+          {/* <Text>{photo}</Text> */}
+          {/* <Text>{gender}</Text> */}
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              setModal(false);
+            }}
+            style={styles.botaosalvarmodal}>
+            <Text style={styles.textosalvar}>Salvar</Text>
+          </TouchableOpacity>
+          {/* <Text>{photoAtual}</Text> */}
         </View>
       </Modal>
 
@@ -224,9 +248,6 @@ const EditarPerfil = ({navigation, route}) => {
           }}
         />
         <Text style={styles.nomegender}>gênero</Text>
-        {/* <TextInput enabled={false} defaultValue={currentGender} style={styles.caixatextogenero} onChangeText={(newName)=>{
-        setEmail(newName)
-      }}/> */}
 
         <DropDownPicker
           disableBorderRadius={true}
@@ -255,14 +276,7 @@ const EditarPerfil = ({navigation, route}) => {
             fontFamily: fontePadrao,
             textTransform: 'uppercase',
           }}
-          disabledStyle={{borderRadius: 0}}
-          modalTitleStyle={{borderRadius: 0}}
-          modalContentContainerStyle={{borderRadius: 0}}
-          badgeStyle={{borderRadius: 0}}
-          tickIconStyle={{borderRadius: 0}}
-          itemSeparatorStyle={{borderRadius: 0}}
-          closeIconStyle={{borderRadius: 0}}
-          disabledItemContainerStyle={{borderRadius: 0}}
+         
           open={open}
           value={value}
           items={items}
@@ -281,10 +295,13 @@ const EditarPerfil = ({navigation, route}) => {
           }}
         />
 
-        <TouchableOpacity activeOpacity={0.5} onPress={()=> {
-          AtualizarUsuario();
-          navigation.navigate('PerfilHome');
-        }} style={styles.botaosalvar}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => {
+            AtualizarUsuario();
+            navigation.navigate('PerfilHome');
+          }}
+          style={styles.botaosalvar}>
           <Text style={styles.textosalvar}>Salvar</Text>
         </TouchableOpacity>
       </View>

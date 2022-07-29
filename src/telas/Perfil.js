@@ -137,6 +137,7 @@ const PerfilHome = ({navigation, route}) => {
                 currentGender: generosTrad[userData['gender']],
                 currentBirth: JSON.stringify([dia, mes, ano]),
                 access_token: access_token,
+                photoId: userData['photo']['id']
 
             });
           }}>
