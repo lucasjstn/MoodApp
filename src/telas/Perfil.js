@@ -12,6 +12,7 @@ import {
   Image,
   Alert,
   Modal,
+  StatusBar,
 } from 'react-native';
 import {darkBlue, fontePadrao, FotoLista, generosTrad, lightColor} from '../constantes';
 import EditarPerfil from './Modal/EditarPerfil';
@@ -85,6 +86,7 @@ const PerfilHome = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
       <Image
         style={styles.image}
         source={{

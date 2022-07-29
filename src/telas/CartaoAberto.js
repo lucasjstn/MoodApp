@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Button, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { atividadesicones, darkBlue, emojis, fontePadrao, lightBlue, meses, nomeAtividades } from '../constantes'
 import  Icon  from 'react-native-vector-icons/Ionicons';
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
@@ -52,6 +52,7 @@ const CartaoAberto = ({route, navigation}) => {
     // console.log(data.created_at)
     return (
         <View style={styles.container}>
+          <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
             <TouchableOpacity
             style={styles.botaosair}
             onPress={() => navigation.navigate('Cartao')}>

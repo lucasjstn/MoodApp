@@ -18,6 +18,7 @@ import {
   Modal,
   Alert,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {d, darkBlue, emojislist, lightBlue, lightColor, meses} from '../constantes';
@@ -235,6 +236,7 @@ function Adicionar({navigation}) {
           <View style={styles.primeirafileira}>
             {/* descanso */}
             <View style={{alignSelf: 'center', alignContent: 'center'}}>
+            <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
               
             <Pressable
               onPress={() => {

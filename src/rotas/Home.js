@@ -90,6 +90,7 @@ const Home = ({navigation}) => {
       const Cartao = ({navigation}) => {
           return(
               <SafeAreaView>
+                <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
                  <FlatList 
                       ListEmptyComponent={ListaVazia}
                       data={cards}

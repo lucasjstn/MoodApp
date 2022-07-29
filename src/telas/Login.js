@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { TextInput, Image, KeyboardAvoidingView, StatusBar, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { TextInput, Image, KeyboardAvoidingView, StatusBar, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fontePadrao } from '../constantes';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Login = ({navigation}) => {
     
@@ -138,7 +139,8 @@ const Login = ({navigation}) => {
     
 
     return (
-        <KeyboardAvoidingView style={styles.container}>
+        <KeyboardAwareScrollView >
+            <View style={styles.container}>
             <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
 
             {/* <Text>{params}</Text> */}
@@ -171,11 +173,11 @@ const Login = ({navigation}) => {
             >
                 <Text style={styles.texto_botao}>Entrar</Text>
             </TouchableOpacity>
-           <Text style={{width: '88%', textAlign: 'center', top: '10%',fontSize: 20, color: 'orange', fontWeight: 'bold'}}
+           <Text style={{width: '88%', textAlign: 'center', top: '10%',fontSize: 17, color: 'orange', fontWeight: 'bold'}}
            >{msgErro}</Text>
             
-
-        </KeyboardAvoidingView>
+            </View>
+        </KeyboardAwareScrollView>
     )
 }
 
@@ -186,9 +188,9 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         width: '80%',
         backgroundColor: 'white',
-        margin: 5,
+        marginBottom: 23,
         borderRadius: 10,
-        top: '13%',
+        top: '16%',
         // position: 'absolute',
     },
     container: {
@@ -218,7 +220,8 @@ const styles = StyleSheet.create({
         color: '#304FFE',
         fontFamily: fontePadrao,
         fontSize: 15,
-        fontWeigth: 'bold',
+        // fontWeigth: 'bold',
+        fontWeight: 'bold',
         textTransform: 'uppercase',
         // justifyContent: 'center',
         // alignItems: 'center',
