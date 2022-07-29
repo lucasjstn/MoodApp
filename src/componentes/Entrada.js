@@ -23,15 +23,13 @@ const Entrada = (props) => {
 
 const styles = StyleSheet.create({
     caixa: {  
-        padding: 10,
         backgroundColor: '#F6F6F6',
         width: 321,
         height: 46,
         position: 'relative',
-        marginTop: '6.1%',
+        margin: 10,
         borderRadius: 10,
-        // fontFamily: 'Source Sans Pro',
-         // marginTop: ,
+        fontFamily: 'Source Sans Pro',
     }
 })
 
