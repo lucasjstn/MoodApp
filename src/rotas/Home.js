@@ -81,7 +81,7 @@ const Home = ({navigation}) => {
     if(cards == null) return <View style={{flex: 1, justifyContent: 'center'}}><ActivityIndicator size={"large"} color={'blue'}/></View>
     // console.log('cartao 1: \n', cards != null ? Object.keys(cards) : 'nulo');
     // console.log(typeof cards !== 'undefined' ? cards[0].activities[2]  : 'nulo')
-    // console.log(emojis[0]['sad'])
+    console.log(cards.created_at)
 
     const abrirCartao = (rota, payload) => {
       navigation.navigate(rota, payload);
@@ -113,7 +113,7 @@ const Home = ({navigation}) => {
                               atividade1: item.activities[0].name,
                               atividade2: item.activities[1].name,
                               atividade3: item.activities[2].name,
-                              created_at: cards[0].created_at,
+                              created_at: item.created_at,
                             })}
                             />}
                       keyExtractor={item => item.id}

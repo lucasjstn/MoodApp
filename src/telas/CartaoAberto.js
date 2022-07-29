@@ -29,7 +29,7 @@ const CartaoAberto = ({route, navigation}) => {
     hojeOntem == 'ontem'
   }
   const d = new Date(created_at);
-// console.log()
+console.log(d)
 
 
     const config = {
