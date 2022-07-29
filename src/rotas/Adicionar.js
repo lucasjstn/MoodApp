@@ -21,7 +21,7 @@ import {
   StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {d, darkBlue, emojislist, lightBlue, lightColor, meses} from '../constantes';
+import {atividadesicones, atividadesicones1, d, darkBlue, emojislist, lightBlue, lightColor, meses} from '../constantes';
 import {Item2render, ListEmoji} from '../componentes/ItemRender';
 import {emojis} from '../constantes';
 import Ionic from 'react-native-vector-icons/Ionicons';
@@ -90,26 +90,7 @@ function Adicionar({navigation}) {
     },
   };
 
-  useEffect(() => {
-    if (
-      trigger == true &&
-      (atividade1 == 0 || atividade2 == 0 || atividade3 == 0)
-    ) {
-      console.log('precisa escolher 3 atividades');
-      setTrigger(false);
-      return Alert.alert('Atenção', 'Você precisa escolher três atividades');
-    } else if (trigger == true && humor.length == 0) {
-      Alert.alert('Humor não pode ser vazio', 'selecione um humor');
-      setTrigger(false);
-    } else if (trigger == true) {
-      criarCartao();
-      console.log('aaaaa');
-      // navigation .navigate('BottomTab')
-      setTimeout(() => {
-        setTrigger(false);
-      }, 1000);
-    }
-  }, [trigger]);
+
 
   const config = {
     headers: {
@@ -117,24 +98,7 @@ function Adicionar({navigation}) {
     },
   };
 
-  const criarCartao = () => {
-    axios.post('https://shrouded-shelf-01513.herokuapp.com/daily_entries', {
-      "daily_entry": {
-        "mood": humor,
-        "activity_ids": [atividade1, atividade2, atividade3],
-        "description": descricao,
-    }}, config
-     
-    )
-    .then(response => {
-      navigation.navigate('Home');
-      // return Alert.alert('Aviso', 'cartão criado com sucesso');
-    })
-    .catch(error => {
-      // navigation.navigate('Login');
-      console.log(error);
-    })
-  }
+
 
   const ListEmoji = ({item, index}) => {
     // console.log('item: \n ', item['mood']);
@@ -143,7 +107,7 @@ function Adicionar({navigation}) {
       <>
       <View>
       <Pressable
-
+        key={index}
         onPress={() => {
           selectedEmojiIndex(index);
           setHumor(item.humor);
@@ -177,7 +141,7 @@ function Adicionar({navigation}) {
     });
     setData([...emojislist]);
   };
-  
+  const [activiesSelected, setActivitiesSelected] = useState([]);
   const dateNow = new Date().getDate();
   const hourNow = new Date().getHours()
   const minutesNow = new Date().getMinutes();
@@ -185,9 +149,130 @@ function Adicionar({navigation}) {
   console.log(dateNow);
   console.log(minutesNow)
 
+    useEffect(() => {
+    if (
+      trigger == true &&
+      (arrayPorId.length < 3)
+    ) {
+      console.log('precisa escolher 3 atividades');
+      setTrigger(false);
+      return Alert.alert('Atenção', 'Você precisa escolher três atividades');
+    } else if (trigger == true && humor.length == 0) {
+      Alert.alert('Humor não pode ser vazio', 'selecione um humor');
+      setTrigger(false);
+    } else if (trigger == true) {
+      criarCartao();
+      console.log('aaaaa');
+      
+      setTimeout(() => {
+        setTrigger(false);
+      }, 1000);
+    }
+  }, [trigger]);
+     
+  const itens = [
+    "sports",
+    "shopping",
+    "rest",
+    "party",
+    "movie",
+    "meal",
+    "games",
+    "date",
+    "cooking"
+  ];
+
+  const ids = {
+    "sports": 1,
+    "shopping": 2,
+    "rest": 3,
+    "party": 4,
+    "movie": 5,
+    "meal": 6,
+    "games": 7,
+    "date": 8,
+    "cooking": 9
+  }
+    
+
+
+  const [selected, setSelected] = useState([])
+  console.log([itens.indexOf(activiesSelected[0])+1, itens.indexOf(activiesSelected[1])+1, itens.indexOf(activiesSelected[2])+1]);
+  console.log(activiesSelected[0]);
+  console.log(activiesSelected[1]);
+  console.log(activiesSelected[2]);
+  const arrayPorId = [itens.indexOf(activiesSelected[0])+1, itens.indexOf(activiesSelected[1])+1, itens.indexOf(activiesSelected[2])+1].filter(item => item != 0);
+  console.log([itens.indexOf(activiesSelected[0])+1, itens.indexOf(activiesSelected[1])+1, itens.indexOf(activiesSelected[2])+1].filter((item) => item !== 0));
+  console.log(itens.indexOf(activiesSelected[1])+1);
+  console.log(arrayPorId);
+
+  const criarCartao = () => {
+    axios.post('https://shrouded-shelf-01513.herokuapp.com/daily_entries', {
+      "daily_entry": {
+        "mood": humor,
+        "activity_ids": arrayPorId,
+        "description": descricao,
+    }}, config
+     
+    )
+    .then(response => {
+      navigation.navigate('Home');
+      // return Alert.alert('Aviso', 'cartão criado com sucesso');
+    })
+    .catch(error => {
+      // navigation.navigate('Login');
+      console.log(error);
+    })
+  }
+  
+
   return (
     <ScrollView style={{flexGrow: 1}}>
       <View style={{height: 1109, backgroundColor: 'white'}}>
+        <Text style={{fontWeight: 'bold', color: 'black', position: 'absolute', top: '44.5%', left: '20.5%'}}>esporte</Text>
+        <Text style={{fontWeight: 'bold', color: 'black', position: 'absolute', top: '44.5%', left: '43.5%'}}>compras</Text>
+        <Text style={{fontWeight: 'bold', color: 'black', position: 'absolute', top: '44.5%', left: '66.5%'}}>descanso</Text>
+        <Text style={{fontWeight: 'bold', color: 'black', position: 'absolute', top: '53.5%', left: '22.5%'}}>festa</Text>
+        <Text style={{fontWeight: 'bold', color: 'black', position: 'absolute', top: '53.5%', left: '45.5%'}}>filme</Text>
+        <Text style={{fontWeight: 'bold', color: 'black', position: 'absolute', top: '53.5%', left: '65.5%'}}>boa refeição</Text>
+        <Text style={{fontWeight: 'bold', color: 'black', position: 'absolute', top: '62.5%', left: '21.5%'}}>games</Text>
+        <Text style={{fontWeight: 'bold', color: 'black', position: 'absolute', top: '62.5%', left: '43.5%'}}>encontro</Text>
+        <Text style={{fontWeight: 'bold', color: 'black', position: 'absolute', top: '62.5%', left: '67.5%'}}>cozinhar</Text>
+
+      <View style={styles.viewContainer}>
+        
+        {itens?.map((item, index) => (
+          <>
+            <Pressable
+            key={index + 1}
+              onPress={() => {
+                setActivitiesSelected((prevArray) =>
+                  prevArray.includes(item)
+                    ? prevArray.filter((i) => i !== item)
+                    : activiesSelected.length < 3
+                    ? [item, ...prevArray]
+                    : [item, prevArray[0], prevArray[1]]
+                    // : prevArray
+                );
+              }}
+              style={[
+                activiesSelected.includes(item)
+                  ? styles.primeiroiconselecionado 
+                  : styles.primeirafileira.icone
+              ]}
+              >
+                
+              {activiesSelected.includes(item) ? <View>{atividadesicones[index+1]}</View> : <View>{atividadesicones1[index+1]}</View>}
+              
+            </Pressable>
+            
+            {[2, 5].includes(index) && (
+              <View style={{ display: "flex", flexBasis: "100%" }} />
+            )}
+            
+          </>
+        ))}
+      </View>
         {/* //container principal */}
         {/* botaosair */}
         <TouchableOpacity
@@ -227,388 +312,14 @@ function Adicionar({navigation}) {
           data={emojislist}
           renderItem={ListEmoji}
         />
-       
-       <Text>{}  {} {} {} {}</Text>
-       <Text>{}</Text>
-        <View style={styles.atividadescontainer}>
-          {/* primeira fileira de icones */}
 
-          <View style={styles.primeirafileira}>
-            {/* descanso */}
-            <View style={{alignSelf: 'center', alignContent: 'center'}}>
-            <StatusBar barStyle={'dark-content'} backgroundColor={'white'}/>
-              
-            <Pressable
-              onPress={() => {
-                if (descanso == false && count < 3) {
-                  setDescanso(true);
-                  setCount(count + 1);
-                  if (count == 0) {
-                    setAtividade1(3);
-                  } else if (count == 1) {
-                    setAtividade2(3);
-                  } else if (count === 2) {
-                    setAtividade3(3);
-                  }
-                } else if (descanso == true && count <= 3) {
-                  setCount(count - 1);
-                  setDescanso(false);
-                  if (count == 1) {
-                    setAtividade1('');
-                  } else if (count == 2) {
-                    setAtividade2('');
-                  } else if (count == 3) {
-                    setAtividade3('');
-                  }
-                } else if (descanso == false && count == 3) {
-                  setDescanso(false);
-                }
-              }}
-              style={[
-                descanso == true ? styles.iconeselecionado : styles.icone,
-              ]}>
-              <Icon name="bed" size={35} color={descanso ? 'white' : 'black'} />
-              
-            </Pressable>
-            <Text style={{textAlign: 'center', right: 20, fontWeight: 'bold', fontSize: 12,color: 'black'}}>descanso</Text>
-            </View>
-           
-            {/* descanso */}
-
-            {/* encontro */}
-            <View style={{alignSelf: 'center', alignContent: 'center'}}>
-
-            <Pressable
-              onPress={() => {
-                if (encontro == false && count < 3) {
-                  setEncontro(true);
-                  setCount(count + 1);
-                  if (count == 0) {
-                    setAtividade1(8);
-                  } else if (count == 1) {
-                    setAtividade2(8);
-                  } else if (count === 2) {
-                    setAtividade3(8);
-                  }
-                } else if (encontro == true && count <= 3) {
-                  setCount(count - 1);
-                  setEncontro(false);
-                  if (count == 1) {
-                    setAtividade1('');
-                  } else if (count == 2) {
-                    setAtividade2('');
-                  } else if (count === 3) {
-                    setAtividade3('');
-                  }
-                } else if (encontro == false && count == 3) {
-                  setEncontro(false);
-                }
-              }}
-              style={[
-                encontro == true ? styles.iconeselecionado : styles.icone,
-              ]}>
-              <Icon name='hand-holding-heart'
-                size={35}
-                color={encontro ? 'white' : 'black'}
-              />
-            </Pressable>
-            <Text style={{textAlign: 'center', right: 20, fontWeight: 'bold', fontSize: 12,color: 'black'}}>encontro</Text>
-
-            </View>
-
-            {/* encontro */}
-
-            {/* filme */}
-            <View style={{alignSelf: 'center', alignContent: 'center'}}>
-
-            <Pressable
-              onPress={() => {
-                if (filme == false && count < 3) {
-                  setFilmes(true);
-                  setCount(count + 1);
-                  if (count == 0) {
-                    setAtividade1(5);
-                  } else if (count == 1) {
-                    setAtividade2(5);
-                  } else if (count === 2) {
-                    setAtividade3(5);
-                  }
-                } else if (filme == true && count <= 3) {
-                  setCount(count - 1);
-                  setFilmes(false);
-                  if (count == 1) {
-                    setAtividade1('');
-                  } else if (count == 2) {
-                    setAtividade2('');
-                  } else if (count === 3) {
-                    setAtividade3('');
-                  }
-                } else if (filme == false && count == 3) {
-                  setFilmes(false);
-                }
-              }}
-              style={[filme == true ? styles.iconeselecionado : styles.icone]}>
-              <Icon name="film" size={35} color={filme ? 'white' : 'black'} />
-            </Pressable>
-            <Text style={{textAlign: 'center', right: 20, fontWeight: 'bold', fontSize: 12, color: 'black'}}>filme</Text>
-
-            </View>
-            {/* filme */}
-          </View>
-  
-          {/* segunda */}
-          <View style={styles.segundafileira}>
-            {/* segunda fileira de icones */}
-
-            {/* compras */}
-            <View style={{alignSelf: 'center', alignContent: 'center'}}>
-            <Pressable
-              onPress={() => {
-                if (compras == false && count < 3) {
-                  setCompras(true);
-                  setCount(count + 1);
-                  if (count == 0) {
-                    setAtividade1(2);
-                  } else if (count == 1) {
-                    setAtividade2(2);
-                  } else if (count === 2) {
-                    setAtividade3(2);
-                  }
-                } else if (compras == true && count <= 3) {
-                  setCount(count - 1);
-                  setCompras(false);
-                  if (count == 1) {
-                    setAtividade1('');
-                  } else if (count == 2) {
-                    setAtividade2('');
-                  } else if (count === 3) {
-                    setAtividade3('');
-                  }
-                } else if (compras == false && count == 3) {
-                  setCompras(false);
-                }
-              }}
-              style={[
-                compras == true ? styles.iconeselecionado : styles.icone,
-              ]}>
-              <Material name='shopping'
-                size={35}
-                color={compras ? 'white' : 'black'}
-              />
-            </Pressable>
-            <Text style={{textAlign: 'center', right: 20,fontWeight: 'bold', fontSize: 12, color: 'black'}}>compras</Text>
-
-            </View>
-            {/* compras */}
-            <View style={{alignSelf: 'center', alignContent: 'center'}}>
-            <Pressable
-              onPress={() => {
-                if (refeicao == false && count < 3) {
-                  setRefeicao(true);
-                  setCount(count + 1);
-                  if (count == 0) {
-                    setAtividade1(6);
-                  } else if (count == 1) {
-                    setAtividade2(6);
-                  } else if (count === 2) {
-                    setAtividade3(6);
-                  }
-                } else if (refeicao == true && count <= 3) {
-                  setCount(count - 1);
-                  setRefeicao(false);
-                  if (count == 1) {
-                    setAtividade1('');
-                  } else if (count == 2) {
-                    setAtividade2('');
-                  } else if (count === 3) {
-                    setAtividade3('');
-                  }
-                } else if (refeicao == false && count == 3) {
-                  setRefeicao(false);
-                }
-              }}
-              style={[
-                refeicao == true ? styles.iconeselecionado : styles.icone,
-              ]}>
-              <Material name='food-fork-drink'
-                size={35}
-                color={refeicao ? 'white' : 'black'}
-              />
-            </Pressable>
-            <Text style={{textAlign: 'center', right: 20, fontWeight: 'bold', fontSize: 12, color: 'black'}}>boa refeição</Text>
-            </View>
-
-            {/* festa */}
-            <View style={{alignSelf: 'center', alignContent: 'center'}}>
-            <Pressable
-              onPress={() => {
-                if (festa == false && count < 3) {
-                  setFesta(true);
-                  setCount(count + 1);
-                  if (count == 0) {
-                    setAtividade1(4);
-                  } else if (count == 1) {
-                    setAtividade2(4);
-                  } else if (count === 2) {
-                    setAtividade3(4);
-                  }
-                } else if (festa == true && count <= 3) {
-                  setCount(count - 1);
-                  setFesta(false);
-                  if (count == 1) {
-                    setAtividade1('');
-                  } else if (count == 2) {
-                    setAtividade2('');
-                  } else if (count === 3) {
-                    setAtividade3('');
-                  }
-                } else if (festa == false && count == 3) {
-                  setFesta(false);
-                }
-              }}
-              style={[festa == true ? styles.iconeselecionado : styles.icone]}>
-              <Material name='party-popper'
-                size={35}
-                color={festa ? 'white' : 'black'}
-              />
-            </Pressable>
-            <Text style={{textAlign: 'center', right: 20,fontWeight: 'bold', fontSize: 12, color: 'black'}}>festa</Text>
-            </View>
-            {/* festa */}
-          </View>
-
-          {/* terceira */}
-          <View style={styles.terceirafileira}>
-            {/* esportes */}
-            <View style={{alignSelf: 'center', alignContent: 'center'}}>
-
-            <Pressable
-              onPress={() => {
-                if (esporte == false && count < 3) {
-                  setEsporte(true);
-                  setCount(count + 1);
-                  if (count == 0) {
-                    setAtividade1(1);
-                  } else if (count == 1) {
-                    setAtividade2(1);
-                  } else if (count === 2) {
-                    setAtividade3(1);
-                  }
-                } else if (esporte == true && count <= 3) {
-                  setCount(count - 1);
-                  setEsporte(false);
-                  if (count == 1) {
-                    setAtividade1('');
-                  } else if (count == 2) {
-                    setAtividade2('');
-                  } else if (count === 3) {
-                    setAtividade3('');
-                  }
-                } else if (esporte == false && count == 3) {
-                  setEsporte(false);
-                }
-              }}
-              style={[
-                esporte == true ? styles.iconeselecionado : styles.icone,
-              ]}>
-             <Material name='soccer' size={35}
-                color={esporte ? 'white' : 'black'}
-              />
-            </Pressable>
-            <Text style={{textAlign: 'center', right: 20, fontWeight: 'bold', fontSize: 12, color: 'black'}}>esporte</Text>
-
-            </View>
-
-            {/* esportes */}
-
-            {/* cozinhar */}
-            <View style={{alignSelf: 'center', alignContent: 'center'}}>
-
-            <Pressable
-              onPress={() => {
-                if (cozinhar == false && count < 3) {
-                  setCozinhar(true);
-                  setCount(count + 1);
-                  if (count == 0) {
-                    setAtividade1(9);
-                  } else if (count == 1) {
-                    setAtividade2(9);
-                  } else if (count === 2) {
-                    setAtividade3(9);
-                  }
-                } else if (cozinhar == true && count <= 3) {
-                  setCount(count - 1);
-                  setCozinhar(false);
-                  if (count == 1) {
-                    setAtividade1('');
-                  } else if (count == 2) {
-                    setAtividade2('');
-                  } else if (count === 3) {
-                    setAtividade3('');
-                  }
-                } else if (cozinhar == false && count == 3) {
-                  setCozinhar(false);
-                }
-              }}
-              style={[
-                cozinhar == true ? styles.iconeselecionado : styles.icone,
-              ]}>
-              <Material name='toaster-oven'
-                size={35}
-                color={cozinhar ? 'white' : 'black'}
-              />
-            </Pressable>
-            <Text style={{textAlign: 'center', right: 20, fontWeight: 'bold', fontSize: 12, color: 'black'}}>cozinhar</Text>
-
-            </View>
-            {/* cozinhar */}
-
-            {/* Games */}
-            <View style={{alignSelf: 'center', alignContent: 'center'}}>
-
-            <Pressable
-              onPress={() => {
-                if (games == false && count < 3) {
-                  setGames(true);
-                  setCount(count + 1);
-                  if (count == 0) {
-                    setAtividade1(7);
-                  } else if (count == 1) {
-                    setAtividade2(7);
-                  } else if (count === 2) {
-                    setAtividade3(7);
-                  }
-                } else if (games == true && count <= 3) {
-                  setCount(count - 1);
-                  setGames(false);
-                  if (count == 1) {
-                    setAtividade1('');
-                  } else if (count == 2) {
-                    setAtividade2('');
-                  } else if (count === 3) {
-                    setAtividade3('');
-                  }
-                } else if (games == false && count == 3) {
-                  setGames(false);
-                }
-              }}
-              style={[games == true ? styles.iconeselecionado : styles.icone]}>
-              <Material name='gamepad' size={35} color={games ? 'white' : 'black'} />
-            </Pressable>
-            <Text style={{textAlign: 'center', right: 20, fontWeight: 'bold', fontSize: 12, color: 'black'}}>jogos</Text>
-
-            </View>
-
-            {/* Games */}
-          </View>
-        </View>
 
         <View style={styles.descricao}>
 					<TextInput style={{maxWidth: '100%'}} multiline={true} numberOfLines={3} placeholder='escreva aqui o que aconteceu' onChangeText={(text)=> setDescricao(text)}/>
           
 				</View>
 
-        <TouchableOpacity style={styles.botaosalvar} onPress={()=> setTrigger(true)}>
+        <TouchableOpacity style={styles.botaosalvar} onPress={()=> {setTrigger(true)}}>
           <Text style={styles.botaosalvar.texto}>Salvar</Text>
         </TouchableOpacity>
         {/* <Text>Atividades: {atividade1} {atividade2} {atividade3}</Text>
@@ -622,6 +333,21 @@ function Adicionar({navigation}) {
 // style={{top: 20, backgroundColor: 'white', borderColor: 'black',   width: '90%', alignSelf: 'center'}}
 
 export const styles = StyleSheet.create({
+  
+  viewContainer: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    borderWidth: 1,
+    borderRadius: 10,
+    margin: 4,
+    top: 400,
+    height: 325,
+    width: '88%',
+    alignSelf: 'center',
+    // alignItems: 'center'
+    justifyContent: 'center'
+  },
   descricao: {
     position: 'absolute',
     top: '70%',
@@ -704,27 +430,32 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     // alignItems: 'center',
   },
+  primeiroiconselecionado: {
+    backgroundColor: "blue",
+    width: 60,
+    height: 60,
+    margin: 20,
+    borderWidth: 1,
+    borderRadius: 30,
+    // backgroundColor: 'white',
+    alignItems: "center",
+    justifyContent: "center"
+  },
   primeirafileira: {
-    flexDirection: 'row',
-    left: 30,
-    top: 20,
-    // position: 'absolute',
-    // top: '42%',
-
-    // top: '8%',
-    // position: 'absolute',
+    flexDirection: "row",
+    top: 50,
     // left: 40,
     icone: {
       // marginLeft: 30,
-      // margin: 20,
+      margin: 20,
       width: 60,
       height: 60,
       borderWidth: 1,
       borderRadius: 30,
-      backgroundColor: 'white',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+      backgroundColor: "white",
+      alignItems: "center",
+      justifyContent: "center"
+    }
   },
   segundafileira: {
     left: 30,
