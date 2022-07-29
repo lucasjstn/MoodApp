@@ -152,11 +152,10 @@ const PerfilHome = ({navigation, route}) => {
                 text: 'SIM',
                 onPress: () => {
                   LimparStorage('@login');
-                  navigation.navigate('Login');
-                  // axios.get(
-                  //   `https://shrouded-shelf-01513.herokuapp.com/daily_entries`,
-                  //   config,
-                  // );
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: 'Login'}]
+                  });
                 },
               },
             ]);
