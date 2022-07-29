@@ -602,7 +602,7 @@ function Adicionar({navigation}) {
         </View>
 
         <View style={styles.descricao}>
-					<TextInput placeholder='escreva aqui o que aconteceu' onChangeText={(text)=> setDescricao(text)}/>
+					<TextInput style={{maxWidth: '100%'}} multiline={true} numberOfLines={3} placeholder='escreva aqui o que aconteceu' onChangeText={(text)=> setDescricao(text)}/>
           
 				</View>
 

@@ -47,6 +47,7 @@ const Home = ({navigation}) => {
     //     CapturarEntradas();
     //     return (()=> {cards === null})
     // }, [cards === null])
+    
     const config = {
       headers: { 'Authorization': `Bearer ${access_token}`}
     }

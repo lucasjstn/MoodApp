@@ -12,3 +12,7 @@ async function CapturarEntradas() {
 
 setData(1);
 console.log(data);
+
+export const configuration = {
+    headers: {'Authorization': `Bearer ${token}`}
+}

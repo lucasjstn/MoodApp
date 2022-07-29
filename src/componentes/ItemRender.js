@@ -73,7 +73,7 @@ const ItemRender = ({icone1, icone2, icone3,navigation, id, mood, created_at, up
           <Text style={{ flexDirection: 'row', top: 10, left: 4, fontWeight: 'bold', fontFamily: fontePadrao }}>
             {activities1 == 'rest' ? 'descanso'
               : activities1 == 'party' ? 'festa'
-                : activities1 == 'shopping' ? 'comprass'
+                : activities1 == 'shopping' ? 'compras'
                   : activities1 == 'sports' ? 'esporte'
                     : activities1 == 'date' ? 'encontro'
                       : activities1 == 'movies' ? 'filmes e séries'

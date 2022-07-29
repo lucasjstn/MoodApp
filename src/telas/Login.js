@@ -157,6 +157,7 @@ const Login = ({navigation}) => {
             />
 
             <TextInput 
+            secureTextEntry={true}
                 placeholder='senha'
                 style={styles.entradas}
                 defaultValue={password}

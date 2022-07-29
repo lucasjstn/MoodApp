@@ -29,7 +29,9 @@ const CartaoAberto = ({route, navigation}) => {
     hojeOntem == 'ontem'
   }
   const d = new Date(created_at);
-console.log()
+// console.log()
+
+
     const config = {
         headers: {'Authorization': `Bearer ${token}`}
     }
@@ -146,7 +148,7 @@ console.log()
             <Text>{token} asdaasdadadasd</Text>
         </View> */}
         <View style={{ position: 'absolute', top: '80%', alignSelf: 'center',width: '88%', }}>
-          <TouchableOpacity 
+          {/* <TouchableOpacity 
           onPress={()=>{
             axios.delete(`https://shrouded-shelf-01513.herokuapp.com/daily_entries/${id}`, config)
             .then(()=> {
@@ -158,7 +160,7 @@ console.log()
           }}
           activeOpacity={0.1} style={{backgroundColor: darkBlue, height: 50, justifyContent: 'center'}}>
             <Text style={{alignSelf: 'center', textTransform: 'uppercase', color: 'white', fontWeight: 'bold'}}>Remover</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         </View>
 
