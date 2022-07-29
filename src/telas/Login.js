@@ -26,17 +26,20 @@ const Login = ({navigation}) => {
     const [loggedIn, setLoggedIn] = useState('')
     const [editable, setEditable] = useState(true);
     
-    // useEffect(() => {
-    //     AsyncStorage.removeItem('@login');
-    // }, [])
     useEffect(()=>{
-        // console.log('mount');
-        // console.log('email: ', email);
-        // console.log('senha: ', password);
-        // console.log('status: ', status);
-        // FazerLogin();
+        if(email.length > 0){
+            if(!validateEmail(email)){
+                setMsgErro('Campo de email inválido');
+                setBotao(false);
+                setCount(count + 1);
+            }
+        }
+    }, [botao])
+
+    useEffect(()=>{
         if(botao == true){
             if(email.length == 0 || password.length == 0){
+               
                 setMsgErro('Os campos não podem estar vazios.')
                 setBotao(false);
                 setCount(count + 1);
@@ -50,11 +53,6 @@ const Login = ({navigation}) => {
     }, [botao])
 
     useEffect(()=>{
-        // console.log('mount');
-        // console.log('email: ', email);
-        // console.log('senha: ', password);
-        // console.log('status: ', status);
-        // FazerLogin();
         if(botao == true){
             if(email.length == 0 || password.length == 0){
                 setMsgErro('Os campos não podem estar vazios.')
@@ -104,9 +102,15 @@ const Login = ({navigation}) => {
         
     }, [count == 5])
 
-    // console.log(access_token);
-
-    
+        function validateEmail (emailAdress)
+        {
+        let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{3})+$/;
+        if (emailAdress.match(regexEmail)) {
+        return true; 
+        } else {
+        return false; 
+        }
+        }
 
     const FazerLogin = () => {
         
