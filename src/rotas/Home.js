@@ -57,31 +57,14 @@ const Home = ({navigation}) => {
             await axios.get(`https://shrouded-shelf-01513.herokuapp.com/daily_entries`, config
             ).then(response => response).then(response => {setCartao(response?.data)})
         } catch (error) {
-            // console.warn(error);
         }   
-        
-        // console.log('cards no documento: \n', cards);
-        // axios.get('https://shrouded-shel.herokuapp.com/daily_entries', {
-        //     headers: { 'Authorization': `Bearer ${access_token}`}
-        // }).then(response => {
-        //     // console.log(response?.data)
-        //     setCartao(Object.keys(response?.data).length);
-        //     setObject(response?.data);
-        // }).catch(error => console.log('erororororo: \n', error))
+  
     }
 
 
-    // const newobj = Object.values(cards);
-    // console.log(newobj)
-    // console.log(' --------newobj-------\n', newobj[0]['activities'])
-    
-    // console.log(data[1].mood)
- 
-    //   console.log(emojis['sad']);
     if(cards == null) return <View style={{flex: 1, justifyContent: 'center'}}><ActivityIndicator size={"large"} color={'blue'}/></View>
-    // console.log('cartao 1: \n', cards != null ? Object.keys(cards) : 'nulo');
-    // console.log(typeof cards !== 'undefined' ? cards[0].activities[2]  : 'nulo')
-    console.log(cards.created_at)
+
+    console.log(cards[0].activities[3] == undefined)
 
     const abrirCartao = (rota, payload) => {
       navigation.navigate(rota, payload);
@@ -101,18 +84,18 @@ const Home = ({navigation}) => {
                             mood={item.mood} 
                             created_at={item.created_at}
                             short_description={item.short_description}
-                            activities1={typeof item.activities[0] === 'undefined' ? null : item.activities[0].name }
-                            activities2={typeof item.activities[1] === 'undefined' ? null : item.activities[1].name}
+                            activities1={typeof item.activities[0] === 'undefined' ? '' : item.activities[0].name }
+                            activities2={typeof item.activities[1] === 'undefined' ? '' : item.activities[1].name}
                             activities3={typeof item.activities[2] === 'undefined' ? '' : item.activities[2].name  }
-                            icone1={item.activities[0].id}
-                            icone2={item.activities[1].id}
-                            icone3={item.activities[2].id}
+                            icone1={typeof item.activities[0] !== 'undefined' ? item.activities[0].id : ''}
+                            icone2={typeof item.activities[1] !== 'undefined'? item.activities[1].id : ''}
+                            icone3={typeof item.activities[2] !== 'undefined' ? item.activities[2].id : ''}
                             navigation={()=>abrirCartao('CartaoAberto', {
                               id: item.id,
                               token: access_token,
-                              atividade1: item.activities[0].name,
-                              atividade2: item.activities[1].name,
-                              atividade3: item.activities[2].name,
+                              atividade1:typeof item.activities[0] !== 'undefined' ?  item.activities[0].name : '',
+                              atividade2:typeof item.activities[1] !== 'undefined'? item.activities[1].name : '',
+                              atividade3: typeof item.activities[2] !== 'undefined' ? item.activities[2].name : '',
                               created_at: item.created_at,
                             })}
                             />}

@@ -1,8 +1,5 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
 import React, {useEffect, useState} from 'react';
-import Home from './Home';
-import Perfil from '../telas/Perfil';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons'
 import {
   View,
   Text,
@@ -11,19 +8,12 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
-  Button,
-  KeyboardAvoidingView,
-  SafeAreaView,
   TextInput,
-  Modal,
   Alert,
   ScrollView,
-  StatusBar,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {atividadesicones, atividadesicones1, d, darkBlue, emojislist, lightBlue, lightColor, meses} from '../constantes';
-import {Item2render, ListEmoji} from '../componentes/ItemRender';
-import {emojis} from '../constantes';
+
+import {atividadesicones, atividadesicones1, d, darkBlue, emojislist, lightBlue, meses} from '../constantes';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -33,21 +23,8 @@ function Adicionar({navigation}) {
   const [data, setData] = useState([]);
   const [humor, setHumor] = useState('');
   const [trigger, setTrigger] = useState(false);
-  const [encontro, setEncontro] = useState(false);
-  const [descanso, setDescanso] = useState(false);
-  const [compras, setCompras] = useState(false);
-  const [filme, setFilmes] = useState(false);
-  const [refeicao, setRefeicao] = useState(false);
-  const [festa, setFesta] = useState(false);
-  const [esporte, setEsporte] = useState(false);
-  const [cozinhar, setCozinhar] = useState(false);
-  const [games, setGames] = useState(false);
   const [count, setCount] = useState(0);
   const [descricao, setDescricao] = useState('');
-  const [atividades, setAtividades] = useState([]);
-  const [atividade1, setAtividade1] = useState(0);
-  const [atividade2, setAtividade2] = useState(0);
-  const [atividade3, setAtividade3] = useState(0);
   const [access_token, setAcess_token] = useState('');
 
   useEffect(()=>{
@@ -55,7 +32,6 @@ function Adicionar({navigation}) {
   })
 
     useEffect(()=> {
-      setEmojis(emojislist);
       setCount(0);
       getData('@login')
       selectedEmojiIndex(10)
@@ -63,8 +39,7 @@ function Adicionar({navigation}) {
     }, [])
     useEffect(()=> {
       setCount(0);
-      setDescanso(false);
-      setEncontro(false);
+
     }, [count < 0])
 
 
@@ -81,14 +56,6 @@ function Adicionar({navigation}) {
       
     }
     
-    getData('@login')
-  const obj = {
-    daily_entry: {
-      mood: humor,
-      activity_ids: [atividade1, atividade2, atividade3],
-      description: descricao,
-    },
-  };
 
 
 
@@ -101,8 +68,6 @@ function Adicionar({navigation}) {
 
 
   const ListEmoji = ({item, index}) => {
-    // console.log('item: \n ', item['mood']);
-    // console.log('index: \n', index);
     return (
       <>
       <View>
@@ -146,15 +111,13 @@ function Adicionar({navigation}) {
   const hourNow = new Date().getHours()
   const minutesNow = new Date().getMinutes();
   const monthNow = new Date().getMonth();
-  console.log(dateNow);
-  console.log(minutesNow)
+
 
     useEffect(() => {
     if (
       trigger == true &&
       (arrayPorId.length < 3)
     ) {
-      console.log('precisa escolher 3 atividades');
       setTrigger(false);
       return Alert.alert('Atenção', 'Você precisa escolher três atividades');
     } else if (trigger == true && humor.length == 0) {
@@ -162,7 +125,6 @@ function Adicionar({navigation}) {
       setTrigger(false);
     } else if (trigger == true) {
       criarCartao();
-      console.log('aaaaa');
       
       setTimeout(() => {
         setTrigger(false);
@@ -181,30 +143,13 @@ function Adicionar({navigation}) {
     "date",
     "cooking"
   ];
-
-  const ids = {
-    "sports": 1,
-    "shopping": 2,
-    "rest": 3,
-    "party": 4,
-    "movie": 5,
-    "meal": 6,
-    "games": 7,
-    "date": 8,
-    "cooking": 9
-  }
     
 
 
   const [selected, setSelected] = useState([])
-  console.log([itens.indexOf(activiesSelected[0])+1, itens.indexOf(activiesSelected[1])+1, itens.indexOf(activiesSelected[2])+1]);
-  console.log(activiesSelected[0]);
-  console.log(activiesSelected[1]);
-  console.log(activiesSelected[2]);
+
   const arrayPorId = [itens.indexOf(activiesSelected[0])+1, itens.indexOf(activiesSelected[1])+1, itens.indexOf(activiesSelected[2])+1].filter(item => item != 0);
-  console.log([itens.indexOf(activiesSelected[0])+1, itens.indexOf(activiesSelected[1])+1, itens.indexOf(activiesSelected[2])+1].filter((item) => item !== 0));
-  console.log(itens.indexOf(activiesSelected[1])+1);
-  console.log(arrayPorId);
+
 
   const criarCartao = () => {
     axios.post('https://shrouded-shelf-01513.herokuapp.com/daily_entries', {
@@ -322,15 +267,10 @@ function Adicionar({navigation}) {
         <TouchableOpacity style={styles.botaosalvar} onPress={()=> {setTrigger(true)}}>
           <Text style={styles.botaosalvar.texto}>Salvar</Text>
         </TouchableOpacity>
-        {/* <Text>Atividades: {atividade1} {atividade2} {atividade3}</Text>
-                <Text>{descricao}</Text>
-                <Text>{access_token}</Text>
-                <Text>{JSON.stringify(obj)}</Text> */}
       </View>
     </ScrollView>
   );
 }
-// style={{top: 20, backgroundColor: 'white', borderColor: 'black',   width: '90%', alignSelf: 'center'}}
 
 export const styles = StyleSheet.create({
   
@@ -457,33 +397,33 @@ export const styles = StyleSheet.create({
       justifyContent: "center"
     }
   },
-  segundafileira: {
-    left: 30,
-    top: 20,
-    flexDirection: 'row',
+  // segundafileira: {
+  //   left: 30,
+  //   top: 20,
+  //   flexDirection: 'row',
 
 
-    // left: 40,
-    icone: {
-      // marginLeft: 30,
-      margin: 20,
-      width: 60,
-      height: 60,
-      borderWidth: 1,
-      borderRadius: 30,
-      backgroundColor: 'white',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  },
-  terceirafileira: {
-    top: 20,
-    left: 30,
-    flexDirection: 'row',
-    // top: '50%',
-    // position: 'absolute',
-    // left: 40,
-  },
+  //   // left: 40,
+  //   icone: {
+  //     // marginLeft: 30,
+  //     margin: 20,
+  //     width: 60,
+  //     height: 60,
+  //     borderWidth: 1,
+  //     borderRadius: 30,
+  //     backgroundColor: 'white',
+  //     alignItems: 'center',
+  //     justifyContent: 'center',
+  //   },
+  // },
+  // terceirafileira: {
+  //   top: 20,
+  //   left: 30,
+  //   flexDirection: 'row',
+  //   // top: '50%',
+  //   // position: 'absolute',
+  //   // left: 40,
+  // },
 
   icone: {
     // marginLeft: 30,

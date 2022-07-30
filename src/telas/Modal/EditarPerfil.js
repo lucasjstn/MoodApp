@@ -1,5 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createStackNavigator} from '@react-navigation/stack';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {
@@ -7,12 +5,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
-  Button,
   Image,
   Alert,
   Modal,
-  KeyboardAvoidingView,
 } from 'react-native';
 import {FlatList, ScrollView, TextInput} from 'react-native-gesture-handler';
 import {
@@ -39,10 +34,6 @@ const EditarPerfil = ({navigation, route}) => {
   } = route.params;
   const dataNas = JSON.parse(currentBirth);
   const [data, setData] = useState([]);
-  const [name, setName] = useState(currentName);
-  const [email, setEmail] = useState(currentEmail);
-  const [gender, setGender] = useState(currentGender);
-  const [birth, setBirth] = useState(data);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [photoAtual, setPhotoAtual] = useState(currentPhoto);
@@ -63,13 +54,11 @@ const EditarPerfil = ({navigation, route}) => {
   const [modal, setModal] = useState(false);
   const [photo, setPhoto] = useState(0);
 
-  // console.log(value);
   const config = {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
   };
-  // console.log(access_token);
   const AtualizarUsuario = () => {
     axios
       .put(
@@ -89,7 +78,6 @@ const EditarPerfil = ({navigation, route}) => {
   useEffect(() => {
     selectedEmojiIndex(10);
   }, []);
-  // console.log(FotoLista[0]['photo'])
   const ListaFotos = ({item, index}) => {
     // console.log('item: \n ', item['mood']);
     // console.log('index: \n', index);
@@ -127,14 +115,10 @@ const EditarPerfil = ({navigation, route}) => {
   };
 
   const selectedEmojiIndex = id => {
-    // alert(JSON.stringify(emojislist));
-    // console.log('id: ', id)
     FotoLista.map((item, index) => {
       if (index == id) {
-        // setIndex(index);
         FotoLista[index].selected = true;
       } else {
-        // setIndex(null);
         FotoLista[index].selected = false;
       }
     });
@@ -206,16 +190,11 @@ const EditarPerfil = ({navigation, route}) => {
             style={styles.botaosalvarmodal}>
             <Text style={styles.textosalvar}>Salvar</Text>
           </TouchableOpacity>
-          {/* <Text>{photoAtual}</Text> */}
+
         </View>
       </Modal>
 
       <View style={styles.container}>
-        {/* <Text>{currentName}</Text>
-            <Text>{currentEmail}</Text>
-            <Text>{currentGender}</Text>
-            <Text>{currentName}</Text>
-            <Text>{data[0]}{data[1]}{data[2]}</Text> */}
         <Image
           style={styles.imagemeditar}
           source={{
@@ -251,13 +230,9 @@ const EditarPerfil = ({navigation, route}) => {
 
         <DropDownPicker
           disableBorderRadius={true}
-          //   disableBorderRadius={true}
+
           listMode="SCROLLVIEW"
           containerStyle={styles.caixatextogenero}
-          //   labelStyle={{
-
-          //     }}
-          //     border
           labelStyle={{
             fontWeight: 'bold',
             borderRadius: 0,
@@ -325,36 +300,23 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   emoji: {
-    // justifyContent: 'center',
-    // alignItems: 'center',
     alignSelf: 'center',
     width: 100,
     height: 100,
     borderRadius: 40,
     alignSelf: 'center',
-    // backgroundColor: 'pink'
+
   },
   emojiselecionado: {
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // alignSelf: 'center',
     width: 100,
     height: 100,
     backgroundColor: '#304FFE',
-    // margin: 10,
     borderRadius: 50,
-    // marginRight: 10,
   },
   listaemoji: {
-    // position: 'absolute',
     alignSelf: 'center',
     top: '20%',
-    // height: 400,
     width: '100%',
-    // justifyContent: 'center',
-    // alignItems: 'center'
-    // backgroundColor: 'cyan'
-    // marginRight: 10,
   },
   textoheaderperfil: {
     color: 'black',
@@ -423,13 +385,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: '12%',
     top: '63%',
-    // backgroundColor: 'white',
     color: 'black',
     fontWeight: 'bold',
     textTransform: 'uppercase',
     width: '75%',
-    // borderWidth: 1,
-    // paddingLeft: '3%',
   },
   nomegender: {
     position: 'absolute',
@@ -524,12 +483,10 @@ const styles = StyleSheet.create({
   },
 
   info: {
-    // maxWidth: 200,
-    width: 300, // position: 'absolute',
+
+    width: 300,
     flexDirection: 'row',
     left: -30,
-    // top: 350,
-    // left: 42,
     titulo: {
       fontWeight: 'bold',
       textTransform: 'uppercase',
@@ -559,7 +516,6 @@ const styles = StyleSheet.create({
   },
   container: {
     height: 750,
-    // width: 428,
     backgroundColor: lightColor,
     alignItems: 'center',
   },

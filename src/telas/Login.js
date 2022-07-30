@@ -9,63 +9,33 @@ const Login = ({navigation}) => {
     
     const [refresh_token, setRefresh_token] = useState('');
     const [access_token, setAcess_token] = useState('');
-    let userToken = ''; 
-    let userRefresh_token = '';
-    let user = {
-        Name: access_token,
-        Age: refresh_token
-    };
     const [status, setStatus] = useState(0);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [msgErro, setMsgErro] = useState('');
     const [botao, setBotao] = useState(false);
     const [count, setCount] = useState(0);
-    const [userInfo, setUserInfo] = useState({});
-    const [params, setParams] = useState('');
-    const [loggedIn, setLoggedIn] = useState('')
+
     const [editable, setEditable] = useState(true);
-    
+
     useEffect(()=>{
-        if(email.length > 0){
-            if(!validateEmail(email)){
-                setMsgErro('Campo de email inválido');
+        if(botao == true){
+            if(email.length == 0 || password.length == 0){
+                setMsgErro('Os campos não podem estar vazios.')
                 setBotao(false);
                 setCount(count + 1);
+            } else if(validateEmail(email)){ 
+                FazerLogin();
+                setBotao(false);
+            } else {
+                setMsgErro('Email inválido');
+                setBotao(false);
             }
-        }
-    }, [botao])
-
-    useEffect(()=>{
-        if(botao == true){
-            if(email.length == 0 || password.length == 0){
-               
-                setMsgErro('Os campos não podem estar vazios.')
-                setBotao(false);
-                setCount(count + 1);
-            } else { 
-                FazerLogin();
-                setBotao(false);
-            }   
             
         }
             
     }, [botao])
 
-    useEffect(()=>{
-        if(botao == true){
-            if(email.length == 0 || password.length == 0){
-                setMsgErro('Os campos não podem estar vazios.')
-                setBotao(false);
-                setCount(count + 1);
-            } else { 
-                FazerLogin();
-                setBotao(false);
-            }   
-            
-        }
-            
-    }, [botao])
 
 
 
