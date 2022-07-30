@@ -12,7 +12,8 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['ReferenceError']);
 import {atividadesicones, atividadesicones1, d, darkBlue, emojislist, lightBlue, meses} from '../constantes';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
@@ -252,6 +253,7 @@ function Adicionar({navigation}) {
 				// </View> */}
 
         <FlatList
+        key={item => item.id}
           style={styles.listaemoji}
           horizontal
           data={emojislist}

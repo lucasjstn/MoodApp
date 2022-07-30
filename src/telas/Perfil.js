@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['ReferenceError']);
 import {
   View,
   StyleSheet,
@@ -150,12 +152,19 @@ const PerfilHome = ({navigation, route}) => {
               {text: 'CANCELAR'},
               {
                 text: 'SIM',
-                onPress: () => {
+                onPress: async () => {
                   LimparStorage('@login');
-                  navigation.reset({
-                    index: 0,
-                    routes: [{name: 'Login'}]
-                  });
+                  await axios.post(`https://shrouded-shelf-01513.herokuapp.com/oauth/revoke`, {}, {
+                    auth: {
+                      username: '3mGWGtxIEKyhq_HGG4cq6hsTOd_zn1SuTD3_cafjUPc',
+                      password: '389JLi1Nd6DQ_soCI85C57ueTlMZ_JR7pRq6SJ0GaB0'
+                    }
+                  }).then(response => {
+                    navigation.reset({
+                      index: 0,
+                      routes: [{name: 'Login'}]
+                    });
+                  }).catch(error => console.warn(error));
                 },
               },
             ]);
