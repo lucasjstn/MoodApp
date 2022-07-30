@@ -121,7 +121,7 @@ function Adicionar({navigation}) {
       setTrigger(false);
       return Alert.alert('Atenção', 'Você precisa escolher três atividades');
     } else if (trigger == true && humor.length == 0) {
-      Alert.alert('Humor não pode ser vazio', 'selecione um humor');
+      Alert.alert('Humor não pode ser vazio', 'Selecione um humor.');
       setTrigger(false);
     } else if (trigger == true) {
       criarCartao();
